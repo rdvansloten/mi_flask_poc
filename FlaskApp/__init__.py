@@ -58,11 +58,11 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        logging.error(request.form)
+        logging.info(request.form)
         data = request.form
 
         for key, value in data.items():
-          logging.error(f"{key}: {value}")
+          logging.info(f"{key}: {value}")
 
         managed_identities = []
         id_count = int(data.get('id_count'))

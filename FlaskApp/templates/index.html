@@ -120,27 +120,27 @@
         }
 
         function addRole(identityId) {
-            roleCounts[identityId]++;
-            const roleDiv = document.createElement('div');
-            roleDiv.className = "role";
-            roleDiv.id = `role_${identityId}_${roleCounts[identityId]}`;
-            roleDiv.innerHTML = `
-                <label>Scope:</label>
-                <select name="scope_${identityId}_${roleCounts[identityId]}">
-                  <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription "Personal"</option>
-                  <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group "mi_flask_poc"</option>
-                </select>
-                <label>Role Definition:</label>
-                <select name="role_definition_${identityId}_${roleCounts[identityId]}">
-                    <option value="Contributor">Contributor</option>
-                    <option value="Reader">Reader</option>
-                </select>
-                <label>Description:</label>
-                <input type="text" name="description_${identityId}_${roleCounts[identityId]}">
-            `;
-            document.getElementById(`roles_${identityId}`).appendChild(roleDiv);
-            document.getElementById(`roles_count_${identityId}`).value = roleCounts[identityId];
-        }
+        roleCounts[identityId]++;
+        const roleDiv = document.createElement('div');
+        roleDiv.className = "role";
+        roleDiv.id = `role_${identityId}_${roleCounts[identityId]}`;
+        roleDiv.innerHTML = `
+            <label>Scope:</label>
+            <select name="scope_${identityId}_${roleCounts[identityId]}">
+              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription "Personal"</option>
+              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group "mi_flask_poc"</option>
+            </select>
+            <label>Role Definition:</label>
+            <select name="role_definition_${identityId}_${roleCounts[identityId]}">
+                <option value="Contributor">Contributor</option>
+                <option value="Reader">Reader</option>
+            </select>
+            <label>Description:</label>
+            <input type="text" name="description_${identityId}_${roleCounts[identityId]}">
+        `;
+        document.getElementById(`roles_${identityId}`).appendChild(roleDiv);
+        document.getElementById(`roles_count_${identityId}`).value = roleCounts[identityId];
+    }
     </script>
 </body>
 
