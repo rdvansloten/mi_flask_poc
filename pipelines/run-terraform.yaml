@@ -11,7 +11,7 @@ stages:
     - checkout: self
       persistCredentials: true
 
-    - task: TerraformInstaller@0
+    - task: TerraformInstaller
       displayName: Install terraform
       inputs:
         terraformVersion: 1.5.4
