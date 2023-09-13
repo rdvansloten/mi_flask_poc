@@ -86,40 +86,56 @@
     <button type="button" onclick="addIdentity()">Add Another Identity</button>
     <input type="submit" value="Submit">
   </form>
-    <script>
-        let identityCount = 1;
-        let roleCounts = { 1: 1 };
+  <script>
+    let existingIdentities = [1]; // Initialize with the first identity
+    let roleCounts = { 1: 1 };
 
-        function addIdentity() {
-            identityCount++;
-            const identityDiv = document.createElement('div');
-            identityDiv.className = "identity";
-            identityDiv.id = `identity_${identityCount}`;
-            identityDiv.innerHTML = `
-                <label>Managed Identity: <input type="text" name="id_${identityCount}"></label>
-                <input type="hidden" id="roles_count_${identityCount}" name="roles_count_${identityCount}" value="1">
-                <div id="roles_${identityCount}">
-                    <div class="role" id="role_${identityCount}_1">
-                        <label>Scope:</label>
-                        <select name="scope_${identityCount}_1">
-                            <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription "Personal"</option>
-                            <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group "mi_flask_poc"</option>
-                        </select>
-                        <label>Role Definition:</label>
-                        <select name="role_definition_${identityCount}_1">
-                            <option value="Contributor">Contributor</option>
-                            <option value="Reader">Reader</option>
-                        </select>
-                        <label>Description:</label>
-                        <input type="text" name="description_${identityCount}_1">
-                    </div>
+    function addIdentity() {
+        const newIdentityId = existingIdentities.length ? Math.max(...existingIdentities) + 1 : 1;
+        existingIdentities.push(newIdentityId);
+        
+        const identityDiv = document.createElement('div');
+        identityDiv.className = "identity";
+        identityDiv.id = `identity_${newIdentityId}`;
+        identityDiv.innerHTML = `
+            <label>Managed Identity: <input type="text" name="id_${newIdentityId}"></label>
+            <input type="hidden" id="roles_count_${newIdentityId}" name="roles_count_${newIdentityId}" value="1">
+            <div id="roles_${newIdentityId}">
+                <div class="role" id="role_${newIdentityId}_1">
+                    <label>Scope:</label>
+                    <select name="scope_${newIdentityId}_1">
+                        <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription "Personal"</option>
+                        <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group "mi_flask_poc"</option>
+                    </select>
+                    <label>Role Definition:</label>
+                    <select name="role_definition_${newIdentityId}_1">
+                        <option value="Contributor">Contributor</option>
+                        <option value="Reader">Reader</option>
+                    </select>
+                    <label>Description:</label>
+                    <input type="text" name="description_${newIdentityId}_1">
                 </div>
-                <button type="button" onclick="addRole(${identityCount})">Add Another Role</button>
-            `;
-            document.getElementById('identities').appendChild(identityDiv);
-            document.getElementById('id_count').value = identityCount;
-            roleCounts[identityCount] = 1;
+            </div>
+            <button type="button" onclick="addRole(${newIdentityId})">Add Another Role</button>
+        `;
+
+        document.getElementById('identities').appendChild(identityDiv);
+        document.getElementById('id_count').value = existingIdentities.length;
+        roleCounts[newIdentityId] = 1;
+    }
+
+    function deleteIdentity(identityId) {
+        const identityDiv = document.getElementById(`identity_${identityId}`);
+        identityDiv.remove();
+
+        // Remove the identityId from the existingIdentities array
+        const index = existingIdentities.indexOf(identityId);
+        if (index > -1) {
+            existingIdentities.splice(index, 1);
         }
+
+        document.getElementById('id_count').value = existingIdentities.length;
+    }
 
         function addRole(identityId) {
             roleCounts[identityId]++;
