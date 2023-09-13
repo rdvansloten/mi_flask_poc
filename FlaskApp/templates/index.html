@@ -38,32 +38,27 @@
 let identityCount = 0;
 let rolesCounts = {};
 
-function addIdentity() {
-    identityCount++;
+function addIdentity(preload = false) {
+    if (!preload) identityCount++;
     const identityContainer = document.getElementById("identityContainer");
     const newIdentity = document.createElement("div");
     newIdentity.className = "identityBlock";
     newIdentity.id = `identityBlock_${identityCount}`;
     newIdentity.innerHTML = `
         <label>Identity ID: </label><input type="text" name="id_${identityCount}"><br>
-        <input type="hidden" name="roles_count_${identityCount}" class="roles_count" value="1">
-        <div class="rolesContainer" id="rolesContainer_${identityCount}">
-            <div class="roleBlock" id="roleBlock_${identityCount}_1">
-                <label>Scope: </label><input type="text" name="scope_${identityCount}_1">
-                <label>Role Definition: </label><input type="text" name="role_definition_${identityCount}_1">
-                <label>Description: </label><input type="text" name="description_${identityCount}_1">
-            </div>
-        </div>
+        <input type="hidden" name="roles_count_${identityCount}" class="roles_count" value="0">
+        <div class="rolesContainer" id="rolesContainer_${identityCount}"></div>
         <button type="button" onclick="addRole(${identityCount})">Add Role</button>
     `;
     identityContainer.appendChild(newIdentity);
     document.getElementById("id_count").value = identityCount;
 }
 
-function addRole(identityIndex) {
-    if (!rolesCounts[identityIndex]) rolesCounts[identityIndex] = 0;
-    rolesCounts[identityIndex]++;
-
+function addRole(identityIndex, preload = false) {
+    if (!preload) {
+        if (!rolesCounts[identityIndex]) rolesCounts[identityIndex] = 0;
+        rolesCounts[identityIndex]++;
+    }
     const roleContainer = document.getElementById(`rolesContainer_${identityIndex}`);
     const newRole = document.createElement("div");
     newRole.className = "roleBlock";
@@ -81,10 +76,9 @@ window.onload = function() {
     let managedIdentities = document.getElementById('preloadedIdentityContainer').textContent;
     if (managedIdentities) {
         managedIdentities = JSON.parse(managedIdentities);
-        
+
         for (let i = 0; i < managedIdentities.length; i++) {
             addIdentity(true);
-            identityCount++;
             const identity = managedIdentities[i];
             document.getElementsByName(`id_${identityCount}`)[0].value = identity.id;
 
@@ -99,11 +93,14 @@ window.onload = function() {
                 document.getElementsByName(`role_definition_${identityCount}_${rolesCounts[identityCount]}`)[0].value = role.role_definition_name;
                 document.getElementsByName(`description_${identityCount}_${rolesCounts[identityCount]}`)[0].value = role.description;
             }
+
+            // Increment the identityCount after fully loading an identity
+            identityCount++;
         }
     }
 };
 
-  </script>
+</script>
 
 </body>
 </html>
