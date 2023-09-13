@@ -75,16 +75,17 @@ def index():
             elif key.startswith("scope_") or key.startswith("role_definition_") or key.startswith("description_"):
                 parts = key.split('_')
                 index = int(parts[-1])
-                field = parts[0]
+                field_name = '_'.join(parts[:-1])  # This is to handle 'role_definition' which has an underscore
 
                 if len(current_roles) < index:
                     current_roles.append({})
 
-                current_roles[index-1][field] = value
+                current_roles[index-1][field_name] = value
 
         if current_identity:
             current_identity["roles"] = current_roles
             managed_identities.append(current_identity)
+
 
         # Upload file to Azure Blob Storage
         container_client = blob_service_client.get_container_client(container_name)
