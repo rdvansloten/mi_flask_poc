@@ -4,6 +4,7 @@ import json
 import os
 import requests
 import base64
+import logging
 
 # Get Storage Account details from environment
 STORAGE_ACCOUNT_CONNECTION_STRING = os.environ["STORAGE_ACCOUNT_CONNECTION_STRING"]
@@ -52,7 +53,12 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
+        logging.info(request.form)
         data = request.form
+
+        for key, value in data.items():
+          logging.info(f"{key}: {value}")
+
         managed_identities = []
         id_count = int(data.get('id_count'))
         for i in range(1, id_count + 1):
