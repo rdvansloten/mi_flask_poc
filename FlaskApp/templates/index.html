@@ -60,22 +60,22 @@
             <label>Managed Identity: <input type="text" name="id_{{ loop.index }}" value="{{ identity.id }}"></label>
             <input type="hidden" id="roles_count_{{ loop.index }}" name="roles_count_{{ loop.index }}" value="{{ identity.roles|length }}">
             <div id="roles_{{ loop.index }}">
-                {% for role in identity.roles %}
-                <div class="role" id="role_{{ loop.index }}">
-                    <label>Scope:</label>
-                    <select name="scope_{{ loop.index }}">
-                        <option value="{{ role.scope }}" selected>{{ role.scope }}</option>
-                        <!-- add other options here -->
-                    </select>
-                    <label>Role Definition:</label>
-                    <select name="role_definition_{{ loop.index }}">
-                        <option value="{{ role.role_definition_name }}" selected>{{ role.role_definition_name }}</option>
-                        <!-- add other options here -->
-                    </select>
-                    <label>Description:</label>
-                    <input type="text" name="description_{{ loop.index }}" value="{{ role.description }}">
-                </div>
-                {% endfor %}
+              {% for role in identity.roles %}
+              <div class="role" id="role_{{ loop.index }}">
+                  <label>Scope:</label>
+                  <select name="scope_{{ loop.index }}">
+                      <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad" {% if role.scope == '/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad' %}selected{% endif %}>Subscription "Personal"</option>
+                      <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc" {% if role.scope == '/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc' %}selected{% endif %}>Resource Group "mi_flask_poc"</option>
+                  </select>
+                  <label>Role Definition:</label>
+                  <select name="role_definition_{{ loop.index }}">
+                      <option value="Contributor" {% if role.role_definition_name == 'Contributor' %}selected{% endif %}>Contributor</option>
+                      <option value="Reader" {% if role.role_definition_name == 'Reader' %}selected{% endif %}>Reader</option>
+                  </select>
+                  <label>Description:</label>
+                  <input type="text" name="description_{{ loop.index }}" value="{{ role.description }}">
+              </div>
+              {% endfor %}
             </div>
             <button type="button" onclick="addRole({{ loop.index }})">Add Another Role</button>
         </div>
