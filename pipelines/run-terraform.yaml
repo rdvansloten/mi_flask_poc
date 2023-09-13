@@ -1,0 +1,31 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: InstallTerraform
+  jobs:
+  - job: InstallTerraform
+    steps:
+    - checkout: self
+    - task: UseTerraform@0
+      inputs:
+        version: '1.5.4'
+        
+- stage: TerraformInitAndApply
+  jobs:
+  - job: TerraformInitAndApply
+    steps:
+    - script: terraform init
+      displayName: 'Terraform init'
+
+    - script: terraform validate
+      displayName: 'Terraform validate'
+
+    - script: terraform plan
+      displayName: 'Terraform plan'
+
+    - script: terraform apply -auto-approve
+      displayName: 'Terraform apply'

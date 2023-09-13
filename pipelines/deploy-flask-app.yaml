@@ -1,13 +1,14 @@
-pool: 'Azure Pipelines'
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
 
 variables:
 - name: app
   value: mi-flask-poc
 - name: rg
   value: mi_flask_poc
-
-trigger:
-  - main
 
 steps:
 - task: AzureCLI@2
@@ -32,7 +33,7 @@ steps:
 - task: AzureCLI@2
   displayName: Deploy application $(app) to Azure Function
   inputs:
-    azureSubscription: 'Woomies.ink - Production'
+    azureSubscription: 'Personal'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
