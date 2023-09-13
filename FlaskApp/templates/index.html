@@ -60,28 +60,53 @@
       }
 
       // Function to add a new role block
+      // function addRoleBlock(roleContainer, roleIndex, identityIndex, roleData) {
+      //   const roleBlockHtml = `
+      //     <div class="role-block" data-role-index="${roleIndex}" data-identity-index="${identityIndex}">
+      //       <label for="scope_${roleIndex}">Scope:</label>
+      //       <select id="scope_${roleIndex}" name="scope_${roleIndex}">
+      //         <option value="scope1" ${roleData && roleData.scope == 'scope1' ? 'selected' : ''}>Scope 1</option>
+      //         <option value="scope2" ${roleData && roleData.scope == 'scope2' ? 'selected' : ''}>Scope 2</option>
+      //       </select>
+
+      //       <label for="role_definition_${roleIndex}">Role Definition:</label>
+      //       <select id="role_definition_${roleIndex}" name="role_definition_${roleIndex}">
+      //         <option value="role1" ${roleData && roleData.role_definition_name == 'role1' ? 'selected' : ''}>Role 1</option>
+      //         <option value="role2" ${roleData && roleData.role_definition_name == 'role2' ? 'selected' : ''}>Role 2</option>
+      //       </select>
+
+      //       <label for="description_${roleIndex}">Description:</label>
+      //       <input type="text" id="description_${roleIndex}" name="description_${roleIndex}" value="${roleData ? roleData.description : ''}">
+      //       <button type="button" class="remove-role">Remove Role</button>
+      //     </div>
+      //   `;
+      //   roleContainer.append(roleBlockHtml);
+      // }
+
+      // Function to add a new role block
       function addRoleBlock(roleContainer, roleIndex, identityIndex, roleData) {
-        const roleBlockHtml = `
-          <div class="role-block" data-role-index="${roleIndex}" data-identity-index="${identityIndex}">
-            <label for="scope_${roleIndex}">Scope:</label>
-            <select id="scope_${roleIndex}" name="scope_${roleIndex}">
-              <option value="scope1" ${roleData && roleData.scope == 'scope1' ? 'selected' : ''}>Scope 1</option>
-              <option value="scope2" ${roleData && roleData.scope == 'scope2' ? 'selected' : ''}>Scope 2</option>
-            </select>
+          const roleBlockHtml = `
+            <div class="role-block" data-role-index="${roleIndex}" data-identity-index="${identityIndex}">
+              <label for="scope_${identityIndex}_${roleIndex}">Scope:</label>
+              <select id="scope_${identityIndex}_${roleIndex}" name="scope_${identityIndex}_${roleIndex}">
+                <option value="scope1" ${roleData && roleData.scope == 'scope1' ? 'selected' : ''}>Scope 1</option>
+                <option value="scope2" ${roleData && roleData.scope == 'scope2' ? 'selected' : ''}>Scope 2</option>
+              </select>
 
-            <label for="role_definition_${roleIndex}">Role Definition:</label>
-            <select id="role_definition_${roleIndex}" name="role_definition_${roleIndex}">
-              <option value="role1" ${roleData && roleData.role_definition_name == 'role1' ? 'selected' : ''}>Role 1</option>
-              <option value="role2" ${roleData && roleData.role_definition_name == 'role2' ? 'selected' : ''}>Role 2</option>
-            </select>
+              <label for="role_definition_${identityIndex}_${roleIndex}">Role Definition:</label>
+              <select id="role_definition_${identityIndex}_${roleIndex}" name="role_definition_${identityIndex}_${roleIndex}">
+                <option value="role1" ${roleData && roleData.role_definition_name == 'role1' ? 'selected' : ''}>Role 1</option>
+                <option value="role2" ${roleData && roleData.role_definition_name == 'role2' ? 'selected' : ''}>Role 2</option>
+              </select>
 
-            <label for="description_${roleIndex}">Description:</label>
-            <input type="text" id="description_${roleIndex}" name="description_${roleIndex}" value="${roleData ? roleData.description : ''}">
-            <button type="button" class="remove-role">Remove Role</button>
-          </div>
-        `;
-        roleContainer.append(roleBlockHtml);
+              <label for="description_${identityIndex}_${roleIndex}">Description:</label>
+              <input type="text" id="description_${identityIndex}_${roleIndex}" name="description_${identityIndex}_${roleIndex}" value="${roleData ? roleData.description : ''}">
+              <button type="button" class="remove-role">Remove Role</button>
+            </div>
+          `;
+          roleContainer.append(roleBlockHtml);
       }
+
 
       // Add a new role block to the identity block on click
       $('#identities-container').on('click', '.add-role', function() {
