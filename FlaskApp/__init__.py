@@ -2,9 +2,36 @@ from flask import Flask, request, redirect, render_template, jsonify
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 import json
 import os
+import requests
 
 # Get Storage Account details from environment
 STORAGE_ACCOUNT_CONNECTION_STRING = os.environ["STORAGE_ACCOUNT_CONNECTION_STRING"]
+AZURE_DEVOPS_PAT = os.environ["AZURE_DEVOPS_PAT"]
+AZURE_DEVOPS_PIPELINE_ID = os.environ["AZURE_DEVOPS_PIPELINE_ID"]
+AZURE_DEVOPS_PROJECT_NAME = os.environ["AZURE_DEVOPS_PROJECT_NAME"]
+AZURE_DEVOPS_ORGANIZATION_NAME = os.environ["AZURE_DEVOPS_ORGANIZATION_NAME"]
+
+def trigger_pipeline(personal_access_token, organization_name, project_name, pipeline_id):
+    url = f"https://dev.azure.com/{organization_name}/{project_name}/_apis/build/builds?api-version=6.0"
+    
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Basic {personal_access_token}',
+    }
+
+    data = {
+        "definition": {
+            "id": pipeline_id
+        }
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+    
+    if response.status_code == 200:
+        print("Pipeline triggered successfully.")
+    else:
+        print(f"Failed to trigger the pipeline. Status code: {response.status_code}")
+        print(response.json())
 
 # Initialize the connection to Azure storage account
 blob_service_client = BlobServiceClient.from_connection_string(STORAGE_ACCOUNT_CONNECTION_STRING)
@@ -38,6 +65,9 @@ def index():
         container_client = blob_service_client.get_container_client(container_name)
         blob_client = container_client.get_blob_client(json_file_name)
         blob_client.upload_blob(json.dumps(managed_identities, indent=4), overwrite=True)
+
+        # Trigger Terraform
+        trigger_pipeline(AZURE_DEVOPS_PAT, AZURE_DEVOPS_ORGANIZATION_NAME, AZURE_DEVOPS_PROJECT_NAME, AZURE_DEVOPS_PIPELINE_ID)
 
         return redirect('/')
 

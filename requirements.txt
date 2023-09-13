@@ -5,3 +5,4 @@
 azure-functions
 Flask
 azure-storage-blob
+requests
