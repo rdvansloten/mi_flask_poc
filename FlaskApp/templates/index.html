@@ -51,35 +51,39 @@
 </head>
 
 <body>
-    <h1>Managed Identities</h1>
-    <form action="/" method="post">
-        <input type="hidden" id="id_count" name="id_count" value="1">
-        <div id="identities">
-            <div class="identity" id="identity_1">
-                <label>Managed Identity: <input type="text" name="id_1"></label>
-                <input type="hidden" id="roles_count_1" name="roles_count_1" value="1">
-                <div id="roles_1">
-                    <div class="role" id="role_1_1">
-                        <label>Scope:</label>
-                        <select name="scope_1_1">
-                          <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription "Personal"</option>
-                          <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group "mi_flask_poc"</option>
-                        </select>
-                        <label>Role Definition:</label>
-                        <select name="role_definition_1_1">
-                            <option value="Storage Account Contributor">Storage Account Contributor</option>
-                            <option value="Reader">Reader</option>
-                        </select>
-                        <label>Description:</label>
-                        <input type="text" name="description_1_1">
-                    </div>
+  <h1>Managed Identities</h1>
+  <form action="/" method="post">
+    <input type="hidden" id="id_count" name="id_count" value="{{ managed_identities|length }}">
+    <div id="identities">
+        {% for identity in managed_identities %}
+        <div class="identity" id="identity_{{ loop.index }}">
+            <label>Managed Identity: <input type="text" name="id_{{ loop.index }}" value="{{ identity.id }}"></label>
+            <input type="hidden" id="roles_count_{{ loop.index }}" name="roles_count_{{ loop.index }}" value="{{ identity.roles|length }}">
+            <div id="roles_{{ loop.index }}">
+                {% for role in identity.roles %}
+                <div class="role" id="role_{{ loop.index }}">
+                    <label>Scope:</label>
+                    <select name="scope_{{ loop.index }}">
+                        <option value="{{ role.scope }}" selected>{{ role.scope }}</option>
+                        <!-- add other options here -->
+                    </select>
+                    <label>Role Definition:</label>
+                    <select name="role_definition_{{ loop.index }}">
+                        <option value="{{ role.role_definition_name }}" selected>{{ role.role_definition_name }}</option>
+                        <!-- add other options here -->
+                    </select>
+                    <label>Description:</label>
+                    <input type="text" name="description_{{ loop.index }}" value="{{ role.description }}">
                 </div>
-                <button type="button" onclick="addRole(1)">Add Another Role</button>
+                {% endfor %}
             </div>
+            <button type="button" onclick="addRole({{ loop.index }})">Add Another Role</button>
         </div>
-        <button type="button" onclick="addIdentity()">Add Another Identity</button>
-        <input type="submit" value="Submit">
-    </form>
+        {% endfor %}
+    </div>
+    <button type="button" onclick="addIdentity()">Add Another Identity</button>
+    <input type="submit" value="Submit">
+  </form>
     <script>
         let identityCount = 1;
         let roleCounts = { 1: 1 };
@@ -128,7 +132,7 @@
                 </select>
                 <label>Role Definition:</label>
                 <select name="role_definition_${identityId}_${roleCounts[identityId]}">
-                    <option value="Storage Account Contributor">Storage Account Contributor</option>
+                    <option value="Contributor">Contributor</option>
                     <option value="Reader">Reader</option>
                 </select>
                 <label>Description:</label>

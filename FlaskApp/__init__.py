@@ -9,6 +9,7 @@ STORAGE_ACCOUNT_CONNECTION_STRING = os.environ["STORAGE_ACCOUNT_CONNECTION_STRIN
 # Initialize the connection to Azure storage account
 blob_service_client = BlobServiceClient.from_connection_string(STORAGE_ACCOUNT_CONNECTION_STRING)
 container_name = "json"
+json_file_name = 'managed_identities.tfvars.json'
 
 app = Flask(__name__)
 
@@ -32,23 +33,24 @@ def index():
                 "id": identity_id,
                 "roles": roles
             })
-        
-        # Convert the Python dictionary to a JSON string
-        json_data = json.dumps(managed_identities, indent=4)
-        
-        # Convert the JSON string to bytes
-        json_bytes = json_data.encode('utf-8')
 
-        # Upload data to Azure Blob Storage
-        json_file_name = 'managed_identities.tfvars.json'
+        # Upload file to Azure Blob Storage
         container_client = blob_service_client.get_container_client(container_name)
         blob_client = container_client.get_blob_client(json_file_name)
-        
-        blob_client.upload_blob(json_bytes, overwrite=True)
+        blob_client.upload_blob(json.dumps(managed_identities, indent=4), overwrite=True)
 
         return redirect('/')
 
-    return render_template('index.html')
+    # Read the JSON file from Azure Blob Storage and populate the HTML form
+    container_client = blob_service_client.get_container_client(container_name)
+    blob_client = container_client.get_blob_client(json_file_name)
+    try:
+        blob_data = blob_client.download_blob()
+        managed_identities = json.loads(blob_data.readall().decode('utf-8'))
+    except:
+        managed_identities = []
+
+    return render_template('index.html', managed_identities=managed_identities)
 
 if __name__ == '__main__':
     app.run(debug=True)
