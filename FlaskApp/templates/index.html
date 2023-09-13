@@ -54,6 +54,7 @@
   <h1>Managed Identities</h1>
   <form action="/" method="post">
       <input type="hidden" id="id_count" name="id_count" value="0">
+      <input type="hidden" id="roles_count_{{ loop.index }}" name="roles_count_{{ loop.index }}" value="{{ identity.roles|length }}">
       <input type="hidden" name="deleted_identities" id="deleted_identities" value="[]">
       <input type="hidden" name="deleted_roles" id="deleted_roles" value="[]">
       <div id="identities">
@@ -80,17 +81,6 @@
           document.getElementById('id_count').value = identityCount;
       }
 
-      function addRole(identityId) {
-          roleCount++;
-          const roleDiv = document.createElement('div');
-          roleDiv.id = `role_${identityId}_${roleCount}`;
-          roleDiv.innerHTML = `<label>Scope: <select name="scope_${identityId}_${roleCount}"><option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription 'Personal'</option><option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group 'mi_flask_poc'</option></select></label>`;
-          roleDiv.innerHTML += `<label>Role Definition: <select name="role_definition_${identityId}_${roleCount}"><option value="Reader">Reader</option><option value="Contributor">Contributor</option></select></label>`;
-          roleDiv.innerHTML += `<label>Description: <input type="text" name="description_${identityId}_${roleCount}"></label>`;
-          roleDiv.innerHTML += `<button type="button" onclick="deleteRole(${identityId}, ${roleCount})">Delete Role</button>`;
-          document.getElementById(`roles_${identityId}`).appendChild(roleDiv);
-      }
-
       function deleteIdentity(identityId) {
           const identityDiv = document.getElementById(`identity_${identityId}`);
           identityDiv.remove();
@@ -100,12 +90,26 @@
           document.getElementById('id_count').value = identityCount;
       }
 
+      function addRole(identityId) {
+          roleCounts[identityId]++;
+          const roleDiv = document.createElement('div');
+          roleDiv.id = `role_${identityId}_${roleCount}`;
+          roleDiv.innerHTML = `<label>Scope: <select name="scope_${identityId}_${roleCount}"><option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription 'Personal'</option><option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group 'mi_flask_poc'</option></select></label>`;
+          roleDiv.innerHTML += `<label>Role Definition: <select name="role_definition_${identityId}_${roleCount}"><option value="Reader">Reader</option><option value="Contributor">Contributor</option></select></label>`;
+          roleDiv.innerHTML += `<label>Description: <input type="text" name="description_${identityId}_${roleCount}"></label>`;
+          roleDiv.innerHTML += `<button type="button" onclick="deleteRole(${identityId}, ${roleCount})">Delete Role</button>`;
+          document.getElementById(`roles_${identityId}`).appendChild(roleDiv);
+          document.getElementById(`roles_count_${identityId}`).value = roleCounts[identityId];
+      }
+
       function deleteRole(identityId, roleId) {
           const roleDiv = document.getElementById(`role_${identityId}_${roleId}`);
           roleDiv.remove();
-          deletedRoles.push(`${identityId}_${roleId}`);
-          document.getElementById('deleted_roles').value = JSON.stringify(deletedRoles);
+          roleCounts[identityId]--;
+          document.getElementById(`roles_count_${identityId}`).value = roleCounts[identityId];
       }
+
+      
   </script>
 </body>
 
