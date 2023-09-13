@@ -68,31 +68,31 @@ def index():
         for key, value in data.items():
             parts = key.split('_')
 
-            if 'id' == parts[0]:
+            if parts[0] == 'id':
                 identity_index = int(parts[1]) - 1
                 while len(managed_identities) <= identity_index:
                     managed_identities.append({"id": None, "roles": []})
                 managed_identities[identity_index]["id"] = value
 
             elif parts[0] in ['scope', 'role_definition', 'description']:
-                identity_index = int(parts[-2]) - 1
-                role_index = int(parts[-1]) - 1
-                field = parts[0]
+                if parts[-1].isdigit() and parts[-2].isdigit():
+                    identity_index = int(parts[-2]) - 1
+                    role_index = int(parts[-1]) - 1
+                    field = parts[0]
 
-                if identity_index not in temp_roles:
-                    temp_roles[identity_index] = {}
+                    if identity_index not in temp_roles:
+                        temp_roles[identity_index] = {}
 
-                if role_index not in temp_roles[identity_index]:
-                    temp_roles[identity_index][role_index] = {}
+                    if role_index not in temp_roles[identity_index]:
+                        temp_roles[identity_index][role_index] = {}
 
-                temp_roles[identity_index][role_index][field] = value
+                    temp_roles[identity_index][role_index][field] = value
 
         for identity_index, roles in temp_roles.items():
             for role_index, role_data in roles.items():
                 while len(managed_identities[identity_index]["roles"]) <= role_index:
                     managed_identities[identity_index]["roles"].append({})
                 managed_identities[identity_index]["roles"][role_index] = role_data
-
 
 
         # Upload file to Azure Blob Storage
