@@ -109,12 +109,19 @@
 
 
       // Add a new role block to the identity block on click
+      // $('#identities-container').on('click', '.add-role', function() {
+      //   const roleContainer = $(this).prev('.roles-container');
+      //   const roleIndex = roleContainer.children('.role-block').length + 1;
+      //   const identityBlock = $(this).closest('.identity-block');
+      //   const identityIndex = identityBlock.data('identity-index');
+      //   addRoleBlock(roleContainer, roleIndex, identityIndex, null);
+      // });
+
       $('#identities-container').on('click', '.add-role', function() {
-        const roleContainer = $(this).prev('.roles-container');
-        const roleIndex = roleContainer.children('.role-block').length + 1;
-        const identityBlock = $(this).closest('.identity-block');
-        const identityIndex = identityBlock.data('identity-index');
-        addRoleBlock(roleContainer, roleIndex, identityIndex, null);
+          const roleContainer = $(this).prev('.roles-container');
+          const roleIndex = roleContainer.children('.role-block').length + 1;
+          const identityIndex = $(this).closest('.identity-block').data('identity-index');
+          addRoleBlock(roleContainer, roleIndex, identityIndex, null);
       });
 
       // Add a new identity block on click
