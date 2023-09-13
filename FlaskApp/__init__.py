@@ -4,6 +4,7 @@ import json
 import os
 import requests
 import base64
+import re
 import sys
 import logging
 
@@ -65,26 +66,38 @@ def index():
         current_identity = None
         current_roles = []
 
+        id_pattern = re.compile(r'id_(\d+)')
+        role_pattern = re.compile(r'(scope|role_definition|description)_(\d+)_(\d+)')
+
         for key, value in sorted(data.items()):
-            if key.startswith("id_"):
+            id_match = id_pattern.match(key)
+            role_match = role_pattern.match(key)
+
+            if id_match:
                 if current_identity:
                     current_identity["roles"] = current_roles
                     managed_identities.append(current_identity)
                 current_identity = {"id": value}
                 current_roles = []
-            elif key.startswith("scope_") or key.startswith("role_definition_") or key.startswith("description_"):
-                parts = key.split('_')
-                index = int(parts[-1])
-                field_name = '_'.join(parts[:-1])  # This is to handle 'role_definition' which has an underscore
 
-                if len(current_roles) < index:
+            elif role_match:
+                field, identity_index, role_index = role_match.groups()
+                identity_index = int(identity_index)
+                role_index = int(role_index)
+
+                if len(managed_identities) < identity_index:
+                    current_roles = []
+                    managed_identities.append({"id": None, "roles": current_roles})
+
+                if len(current_roles) < role_index:
                     current_roles.append({})
 
-                current_roles[index-1][field_name] = value
+                current_roles[role_index - 1][field] = value
 
         if current_identity:
             current_identity["roles"] = current_roles
-            managed_identities.append(current_identity)
+            if len(managed_identities) < len(current_roles):
+                managed_identities.append(current_identity)
 
 
         # Upload file to Azure Blob Storage

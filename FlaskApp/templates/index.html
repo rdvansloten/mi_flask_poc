@@ -47,7 +47,7 @@
       // Function to add a new identity block
       function addIdentityBlock(identityIndex, identityData) {
         const identityBlockHtml = `
-          <div class="identity-block">
+        <div class="identity-block" data-identity-index="${identityIndex}">
             <label for="id_${identityIndex}">Identity ID:</label>
             <input type="text" id="id_${identityIndex}" name="id_${identityIndex}" value="${identityData ? identityData.id : ''}">
             <button type="button" class="remove-identity">Remove Identity</button>
@@ -62,7 +62,7 @@
       // Function to add a new role block
       function addRoleBlock(roleContainer, roleIndex, roleData) {
         const roleBlockHtml = `
-          <div class="role-block">
+          <div class="role-block" data-role-index="${roleIndex}" data-identity-index="${identityIndex}">
             <label for="scope_${roleIndex}">Scope:</label>
             <select id="scope_${roleIndex}" name="scope_${roleIndex}">
               <option value="scope1" ${roleData && roleData.scope == 'scope1' ? 'selected' : ''}>Scope 1</option>
