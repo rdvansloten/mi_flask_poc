@@ -4,19 +4,18 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-- stage: InstallTerraform
+- stage: Terraform
   jobs:
-  - job: InstallTerraform
+  - job: Terraform
     steps:
     - checkout: self
-    - task: UseTerraform@0
+      persistCredentials: true
+
+    - task: TerraformInstaller
+      displayName: Install terraform
       inputs:
-        version: '1.5.4'
-        
-- stage: TerraformInitAndApply
-  jobs:
-  - job: TerraformInitAndApply
-    steps:
+        terraformVersion: 1.5.4
+
     - script: terraform init
       displayName: 'Terraform init'
 
