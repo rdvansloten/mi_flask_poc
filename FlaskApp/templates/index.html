@@ -10,7 +10,8 @@
 <form action="/" method="post" id="mainForm">
     <input type="hidden" name="id_count" id="id_count" value="1">
       <!-- Add this somewhere within your <form> tag -->
-    <div id="preloadedIdentityContainer"></div>
+      <div id="preloadedIdentityContainer" style="display:none;">{{ managed_identities|tojson|safe }}</div>
+
 
     <div id="identityContainer">
         <div class="identityBlock" id="identityBlock_1">
@@ -78,19 +79,30 @@ function addRole(identityIndex) {
 
   // New code to load existing managed identities
   window.onload = function() {
-      const managedIdentities = {{ managed_identities|tojson|safe }};
-      for(let i = 0; i < managedIdentities.length; i++) {
-          const identity = managedIdentities[i];
-          addIdentity(true);
-          document.querySelector(`input[name="id_${i + 1}"]`).value = identity.id;
-          for(let j = 0; j < identity.roles.length; j++) {
-              const role = identity.roles[j];
-              if (j > 0) addRole(i + 1);
-              document.querySelector(`input[name="scope_${i + 1}_${j + 1}"]`).value = role.scope;
-              document.querySelector(`input[name="role_definition_${i + 1}_${j + 1}"]`).value = role.role_definition_name;
-              document.querySelector(`input[name="description_${i + 1}_${j + 1}"]`).value = role.description;
-          }
-      }
+    let managedIdentities = document.getElementById('preloadedIdentityContainer').textContent;
+    if (managedIdentities) {
+        managedIdentities = JSON.parse(managedIdentities);
+        
+        // Reset the identity count
+        identityCount = 0;
+        
+        for (let i = 0; i < managedIdentities.length; i++) {
+            addIdentity();
+            const identity = managedIdentities[i];
+            document.getElementsByName(`id_${identityCount}`)[0].value = identity.id;
+
+            // Reset the roles count for this identity
+            rolesCounts[identityCount] = 0;
+
+            for (let j = 0; j < identity.roles.length; j++) {
+                addRole(identityCount);
+                const role = identity.roles[j];
+                document.getElementsByName(`scope_${identityCount}_${rolesCounts[identityCount]}`)[0].value = role.scope;
+                document.getElementsByName(`role_definition_${identityCount}_${rolesCounts[identityCount]}`)[0].value = role.role_definition_name;
+                document.getElementsByName(`description_${identityCount}_${rolesCounts[identityCount]}`)[0].value = role.description;
+            }
+        }
+    }
   }
 }
   </script>
