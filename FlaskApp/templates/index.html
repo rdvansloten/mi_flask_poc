@@ -60,7 +60,7 @@
       }
 
       // Function to add a new role block
-      function addRoleBlock(roleContainer, roleIndex, roleData) {
+      function addRoleBlock(roleContainer, roleIndex, identityIndex, roleData) {
         const roleBlockHtml = `
           <div class="role-block" data-role-index="${roleIndex}" data-identity-index="${identityIndex}">
             <label for="scope_${roleIndex}">Scope:</label>
@@ -82,6 +82,15 @@
         `;
         roleContainer.append(roleBlockHtml);
       }
+
+      // Add a new role block to the identity block on click
+      $('#identities-container').on('click', '.add-role', function() {
+        const roleContainer = $(this).prev('.roles-container');
+        const roleIndex = roleContainer.children('.role-block').length + 1;
+        const identityBlock = $(this).closest('.identity-block');
+        const identityIndex = identityBlock.data('identity-index');
+        addRoleBlock(roleContainer, roleIndex, identityIndex, null);
+      });
 
       // Add a new identity block on click
       $('#add-identity').click(function() {
