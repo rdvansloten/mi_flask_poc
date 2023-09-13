@@ -53,6 +53,7 @@
 <body>
   <h1>Managed Identities</h1>
   <form action="/" method="post">
+      <input type="hidden" id="id_count" name="id_count" value="0">
       <input type="hidden" name="deleted_identities" id="deleted_identities" value="[]">
       <input type="hidden" name="deleted_roles" id="deleted_roles" value="[]">
       <div id="identities">
@@ -76,6 +77,7 @@
           identityDiv.innerHTML += `<button type="button" onclick="addRole(${identityCount})">Add Another Role</button>`;
           identityDiv.innerHTML += `<button type="button" onclick="deleteIdentity(${identityCount})">Delete Identity</button>`;
           document.getElementById('identities').appendChild(identityDiv);
+          document.getElementById('id_count').value = identityCount;
       }
 
       function addRole(identityId) {
@@ -94,6 +96,8 @@
           identityDiv.remove();
           deletedIdentities.push(identityId);
           document.getElementById('deleted_identities').value = JSON.stringify(deletedIdentities);
+          identityCount--;
+          document.getElementById('id_count').value = identityCount;
       }
 
       function deleteRole(identityId, roleId) {
