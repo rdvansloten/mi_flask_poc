@@ -1,132 +1,90 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Managed Identities</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+    <script>
+        let identityCount = {{ managed_identities|length }};
+        let roleCounts = {};
+
+        {% for identity in managed_identities %}
+            roleCounts[{{ loop.index }}] = {{ identity.roles|length }};
+        {% endfor %}
+
+        function addIdentity() {
+            identityCount++;
+            let idForm = document.getElementById("identityForms");
+
+            let newIdentityDiv = document.createElement('div');
+            newIdentityDiv.id = `identity_${identityCount}`;
+            newIdentityDiv.innerHTML = `
+                <label>ID:</label>
+                <input type="text" name="id_${identityCount}">
+                <button type="button" onclick="addRole(${identityCount})">Add Role</button>
+                <div id="roles_${identityCount}"></div>
+                <input type="hidden" id="roles_count_${identityCount}" name="roles_count_${identityCount}" value="0">
+            `;
+            idForm.appendChild(newIdentityDiv);
+            roleCounts[identityCount] = 0;
         }
-        
-        h1 {
-            background-color: #008AD7;
-            color: white;
-            padding: 1em;
-            margin: 0;
+
+        function addRole(identityIndex) {
+            let rolesDiv = document.getElementById(`roles_${identityIndex}`);
+            roleCounts[identityIndex]++;
+
+            let newRoleDiv = document.createElement('div');
+            newRoleDiv.id = `role_${identityIndex}_${roleCounts[identityIndex]}`;
+            newRoleDiv.innerHTML = `
+                <label>Scope:</label>
+                <input type="text" name="scope_${identityIndex}_${roleCounts[identityIndex]}">
+                <label>Role:</label>
+                <input type="text" name="role_definition_${identityIndex}_${roleCounts[identityIndex]}">
+                <label>Description:</label>
+                <input type="text" name="description_${identityIndex}_${roleCounts[identityIndex]}">
+                <button type="button" onclick="deleteRole(${identityIndex}, ${roleCounts[identityIndex]})">Delete</button>
+            `;
+            rolesDiv.appendChild(newRoleDiv);
+            document.getElementById(`roles_count_${identityIndex}`).value = roleCounts[identityIndex];
         }
-        
-        form {
-            padding: 2em;
+
+        function deleteRole(identityIndex, roleIndex) {
+            let roleDiv = document.getElementById(`role_${identityIndex}_${roleIndex}`);
+            roleDiv.remove();
+            roleCounts[identityIndex]--;
+            document.getElementById(`roles_count_${identityIndex}`).value = roleCounts[identityIndex];
         }
-        
-        .identity {
-            border: 1px solid #ccc;
-            margin-bottom: 2em;
-            padding: 1em;
-            border-radius: 5px;
-        }
-        
-        .role {
-            border: 1px dashed #ccc;
-            margin: 1em;
-            padding: 1em;
-        }
-        
-        button,
-        input[type="submit"] {
-            background-color: #008AD7;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-        
-        button:hover,
-        input[type="submit"]:hover {
-            background-color: #008AD7;
-        }
-    </style>
+    </script>
 </head>
-
 <body>
-  <h1>Managed Identities</h1>
-  <form action="/" method="post">
-      <input type="hidden" id="id_count" name="id_count" value="{{ managed_identities|length }}">
-      
-      <div id="identities">
-          {% for identity in managed_identities %}
-          <div class="identity" id="identity_{{ loop.index }}">
-              <label>Managed Identity: <input type="text" name="id_{{ loop.index }}" value="{{ identity.id }}"></label>
-              <input type="hidden" id="roles_count_{{ loop.index }}" name="roles_count_{{ loop.index }}" value="{{ identity.roles|length }}">
-              <button type="button" onclick="deleteIdentity({{ loop.index }})">Delete Identity</button>
-              
-              <div id="roles_{{ loop.index }}">
-                  {% for role in identity.roles %}
-                  <div class="role" id="role_{{ loop.index }}">
-                      <!-- role fields here -->
-                      <button type="button" onclick="deleteRole({{ loop.index }})">Delete Role</button>
-                  </div>
-                  {% endfor %}
-              </div>
-              
-              <button type="button" onclick="addRole({{ loop.index }})">Add Another Role</button>
-          </div>
-          {% endfor %}
-      </div>
-      
-      <button type="button" onclick="addIdentity()">Add Another Identity</button>
-      <input type="submit" value="Submit">
-  </form>
-  <script>
-      let identityCount = 0;
-      let roleCount = 0;
-      let deletedIdentities = [];
-      let deletedRoles = [];
 
-      function addIdentity() {
-          identityCount++;
-          const identityDiv = document.createElement('div');
-          identityDiv.id = `identity_${identityCount}`;
-          identityDiv.innerHTML = `<label>Managed Identity: <input type="text" name="id_${identityCount}"></label>`;
-          identityDiv.innerHTML += `<div id="roles_${identityCount}"></div>`;
-          identityDiv.innerHTML += `<button type="button" onclick="addRole(${identityCount})">Add Another Role</button>`;
-          identityDiv.innerHTML += `<button type="button" onclick="deleteIdentity(${identityCount})">Delete Identity</button>`;
-          document.getElementById('identities').appendChild(identityDiv);
-          document.getElementById('id_count').value = identityCount;
-      }
+    <form action="/" method="post">
+        <div id="identityForms">
+            {% for identity in managed_identities %}
+                <div id="identity_{{ loop.index }}">
+                    <label>ID:</label>
+                    <input type="text" name="id_{{ loop.index }}" value="{{ identity.id }}">
+                    <button type="button" onclick="addRole({{ loop.index }})">Add Role</button>
+                    <div id="roles_{{ loop.index }}">
+                        {% for role in identity.roles %}
+                            <div id="role_{{ loop.index }}">
+                                <label>Scope:</label>
+                                <input type="text" name="scope_{{ loop.index }}" value="{{ role.scope }}">
+                                <label>Role:</label>
+                                <input type="text" name="role_definition_{{ loop.index }}" value="{{ role.role_definition_name }}">
+                                <label>Description:</label>
+                                <input type="text" name="description_{{ loop.index }}" value="{{ role.description }}">
+                                <button type="button" onclick="deleteRole({{ loop.index }})">Delete</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" id="roles_count_{{ loop.index }}" name="roles_count_{{ loop.index }}" value="{{ identity.roles|length }}">
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" onclick="addIdentity()">Add Identity</button>
+        <input type="hidden" id="id_count" name="id_count" value="{{ managed_identities|length }}">
+        <input type="submit" value="Save">
+    </form>
 
-      function deleteIdentity(identityId) {
-          const identityDiv = document.getElementById(`identity_${identityId}`);
-          identityDiv.remove();
-          deletedIdentities.push(identityId);
-          document.getElementById('deleted_identities').value = JSON.stringify(deletedIdentities);
-          identityCount--;
-          document.getElementById('id_count').value = identityCount;
-      }
-
-      function addRole(identityId) {
-          roleCounts[identityId]++;
-          const roleDiv = document.createElement('div');
-          roleDiv.id = `role_${identityId}_${roleCount}`;
-          roleDiv.innerHTML = `<label>Scope: <select name="scope_${identityId}_${roleCount}"><option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription 'Personal'</option><option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group 'mi_flask_poc'</option></select></label>`;
-          roleDiv.innerHTML += `<label>Role Definition: <select name="role_definition_${identityId}_${roleCount}"><option value="Reader">Reader</option><option value="Contributor">Contributor</option></select></label>`;
-          roleDiv.innerHTML += `<label>Description: <input type="text" name="description_${identityId}_${roleCount}"></label>`;
-          roleDiv.innerHTML += `<button type="button" onclick="deleteRole(${identityId}, ${roleCount})">Delete Role</button>`;
-          document.getElementById(`roles_${identityId}`).appendChild(roleDiv);
-          document.getElementById(`roles_count_${identityId}`).value = roleCounts[identityId];
-      }
-
-      function deleteRole(identityId, roleId) {
-          const roleDiv = document.getElementById(`role_${identityId}_${roleId}`);
-          roleDiv.remove();
-          roleCounts[identityId]--;
-          document.getElementById(`roles_count_${identityId}`).value = roleCounts[identityId];
-      }
-
-      
-  </script>
 </body>
-
 </html>
