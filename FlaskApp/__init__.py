@@ -61,25 +61,30 @@ def index():
         logging.info(request.form)
         data = request.form
 
-        for key, value in data.items():
-          logging.info(f"{key}: {value}")
-
         managed_identities = []
-        id_count = int(data.get('id_count'))
-        for i in range(1, id_count + 1):
-            identity_id = data.get(f'id_{i}')
-            roles_count = int(data.get(f'roles_count_{i}'))
-            roles = []
-            for j in range(1, roles_count + 1):
-                roles.append({
-                    "scope": data.get(f'scope_{i}_{j}'),
-                    "role_definition_name": data.get(f'role_definition_{i}_{j}'),
-                    "description": data.get(f'description_{i}_{j}')
-                })
-            managed_identities.append({
-                "id": identity_id,
-                "roles": roles
-            })
+        current_identity = None
+        current_roles = []
+
+        for key, value in sorted(data.items()):
+            if key.startswith("id_"):
+                if current_identity:
+                    current_identity["roles"] = current_roles
+                    managed_identities.append(current_identity)
+                current_identity = {"id": value}
+                current_roles = []
+            elif key.startswith("scope_") or key.startswith("role_definition_") or key.startswith("description_"):
+                parts = key.split('_')
+                index = int(parts[-1])
+                field = parts[0]
+
+                if len(current_roles) < index:
+                    current_roles.append({})
+
+                current_roles[index-1][field] = value
+
+        if current_identity:
+            current_identity["roles"] = current_roles
+            managed_identities.append(current_identity)
 
         # Upload file to Azure Blob Storage
         container_client = blob_service_client.get_container_client(container_name)
@@ -97,10 +102,59 @@ def index():
     try:
         blob_data = blob_client.download_blob()
         managed_identities = json.loads(blob_data.readall().decode('utf-8'))
-    except:
+    except Exception as e:
+        logging.error(f"Error reading blob: {e}")
         managed_identities = []
 
     return render_template('index.html', managed_identities=managed_identities)
+
+
+# @app.route('/', methods=['GET', 'POST'])
+# def index():
+#     if request.method == 'POST':
+#         logging.info(request.form)
+#         data = request.form
+
+#         for key, value in data.items():
+#           logging.info(f"{key}: {value}")
+
+#         managed_identities = []
+#         id_count = int(data.get('id_count'))
+#         for i in range(1, id_count + 1):
+#             identity_id = data.get(f'id_{i}')
+#             roles_count = int(data.get(f'roles_count_{i}'))
+#             roles = []
+#             for j in range(1, roles_count + 1):
+#                 roles.append({
+#                     "scope": data.get(f'scope_{i}_{j}'),
+#                     "role_definition_name": data.get(f'role_definition_{i}_{j}'),
+#                     "description": data.get(f'description_{i}_{j}')
+#                 })
+#             managed_identities.append({
+#                 "id": identity_id,
+#                 "roles": roles
+#             })
+
+#         # Upload file to Azure Blob Storage
+#         container_client = blob_service_client.get_container_client(container_name)
+#         blob_client = container_client.get_blob_client(json_file_name)
+#         blob_client.upload_blob(json.dumps(managed_identities, indent=4), overwrite=True)
+
+#         # Trigger Terraform
+#         trigger_pipeline(AZURE_DEVOPS_PAT, AZURE_DEVOPS_ORGANIZATION_NAME, AZURE_DEVOPS_PROJECT_NAME, AZURE_DEVOPS_PIPELINE_ID)
+
+#         return redirect('/')
+
+#     # Read the JSON file from Azure Blob Storage and populate the HTML form
+#     container_client = blob_service_client.get_container_client(container_name)
+#     blob_client = container_client.get_blob_client(json_file_name)
+#     try:
+#         blob_data = blob_client.download_blob()
+#         managed_identities = json.loads(blob_data.readall().decode('utf-8'))
+#     except:
+#         managed_identities = []
+
+#     return render_template('index.html', managed_identities=managed_identities)
 
 if __name__ == '__main__':
     app.run(debug=True)
