@@ -63,41 +63,36 @@ def index():
         data = request.form
 
         managed_identities = []
-        current_identity = None
-        current_roles = []
+        temp_roles = {}
 
-        id_pattern = re.compile(r'id_(\d+)')
-        role_pattern = re.compile(r'(scope|role_definition|description)_(\d+)_(\d+)')
+        for key, value in data.items():
+            parts = key.split('_')
 
-        for key, value in sorted(data.items()):
-            id_match = id_pattern.match(key)
-            role_match = role_pattern.match(key)
+            if 'id' == parts[0]:
+                identity_index = int(parts[1]) - 1
+                while len(managed_identities) <= identity_index:
+                    managed_identities.append({"id": None, "roles": []})
+                managed_identities[identity_index]["id"] = value
 
-            if id_match:
-                if current_identity:
-                    current_identity["roles"] = current_roles
-                    managed_identities.append(current_identity)
-                current_identity = {"id": value}
-                current_roles = []
+            elif parts[0] in ['scope', 'role_definition', 'description']:
+                identity_index = int(parts[-2]) - 1
+                role_index = int(parts[-1]) - 1
+                field = parts[0]
 
-            elif role_match:
-                field, identity_index, role_index = role_match.groups()
-                identity_index = int(identity_index)
-                role_index = int(role_index)
+                if identity_index not in temp_roles:
+                    temp_roles[identity_index] = {}
 
-                if len(managed_identities) < identity_index:
-                    current_roles = []
-                    managed_identities.append({"id": None, "roles": current_roles})
+                if role_index not in temp_roles[identity_index]:
+                    temp_roles[identity_index][role_index] = {}
 
-                if len(current_roles) < role_index:
-                    current_roles.append({})
+                temp_roles[identity_index][role_index][field] = value
 
-                current_roles[role_index - 1][field] = value
+        for identity_index, roles in temp_roles.items():
+            for role_index, role_data in roles.items():
+                while len(managed_identities[identity_index]["roles"]) <= role_index:
+                    managed_identities[identity_index]["roles"].append({})
+                managed_identities[identity_index]["roles"][role_index] = role_data
 
-        if current_identity:
-            current_identity["roles"] = current_roles
-            if len(managed_identities) < len(current_roles):
-                managed_identities.append(current_identity)
 
 
         # Upload file to Azure Blob Storage
