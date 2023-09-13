@@ -90,7 +90,7 @@
             identityDiv.className = "identity";
             identityDiv.id = `identity_${identityCount}`;
             identityDiv.innerHTML = `
-                <label>ID: <input type="text" name="id_${identityCount}"></label>
+                <label>Managed Identity name: <input type="text" name="id_${identityCount}"></label>
                 <input type="hidden" id="roles_count_${identityCount}" name="roles_count_${identityCount}" value="1">
                 <div id="roles_${identityCount}">
                     <div class="role" id="role_${identityCount}_1">
@@ -123,8 +123,8 @@
             roleDiv.innerHTML = `
                 <label>Scope:</label>
                 <select name="scope_${identityId}_${roleCounts[identityId]}">
-                    <option value="/subscriptions/0000...">Option 1</option>
-                    <option value="/subscriptions/1111...">Option 2</option>
+                  <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription "Personal"</option>
+                  <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group "mi_flask_poc"</option>
                 </select>
                 <label>Role Definition:</label>
                 <select name="role_definition_${identityId}_${roleCounts[identityId]}">
