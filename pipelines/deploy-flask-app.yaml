@@ -1,0 +1,43 @@
+pool: 'Azure Pipelines'
+
+variables:
+- name: app
+  value: mi-flask-poc
+- name: rg
+  value: mi_flask_poc
+
+trigger:
+  - main
+
+steps:
+- task: AzureCLI@2
+  displayName: Build requirements for application $(app)
+  inputs:
+    azureSubscription: 'Personal'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      python -m venv worker_venv
+      source worker_venv/bin/activate
+      pip install setuptools
+      pip install -r requirements.txt
+
+- task: ArchiveFiles@2
+  displayName: "Archive files"
+  inputs:
+    rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
+    includeRootFolder: false
+    archiveFile: "build.zip"
+
+- task: AzureCLI@2
+  displayName: Deploy application $(app) to Azure Function
+  inputs:
+    azureSubscription: 'Woomies.ink - Production'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az functionapp deployment source config-zip \
+        --resource-group $(rg) \
+        --name $(app) \
+        --src build.zip \
+        --build-remote true
