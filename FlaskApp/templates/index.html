@@ -58,7 +58,7 @@
       <div id="identities">
           <!-- Identities will be inserted here -->
       </div>
-      <button type="button" onclick="addIdentity()">Add Another Identity</button>
+      <button type="button" onclick="addIdentity()">Add Identity</button>
       <input type="submit" value="Submit">
   </form>
   <script>
@@ -82,8 +82,8 @@
           roleCount++;
           const roleDiv = document.createElement('div');
           roleDiv.id = `role_${identityId}_${roleCount}`;
-          roleDiv.innerHTML = `<label>Scope: <select name="scope_${identityId}_${roleCount}"><option value="option1">Option 1</option><option value="option2">Option 2</option></select></label>`;
-          roleDiv.innerHTML += `<label>Role Definition: <select name="role_definition_${identityId}_${roleCount}"><option value="role1">Role 1</option><option value="role2">Role 2</option></select></label>`;
+          roleDiv.innerHTML = `<label>Scope: <select name="scope_${identityId}_${roleCount}"><option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription 'Personal'</option><option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group 'mi_flask_poc'</option></select></label>`;
+          roleDiv.innerHTML += `<label>Role Definition: <select name="role_definition_${identityId}_${roleCount}"><option value="Reader">Reader</option><option value="Contributor">Contributor</option></select></label>`;
           roleDiv.innerHTML += `<label>Description: <input type="text" name="description_${identityId}_${roleCount}"></label>`;
           roleDiv.innerHTML += `<button type="button" onclick="deleteRole(${identityId}, ${roleCount})">Delete Role</button>`;
           document.getElementById(`roles_${identityId}`).appendChild(roleDiv);
