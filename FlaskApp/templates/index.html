@@ -76,9 +76,9 @@ function addRole(identityIndex) {
     `;
     roleContainer.appendChild(newRole);
     document.querySelector(`input[name="roles_count_${identityIndex}"]`).value = rolesCounts[identityIndex];
-
-  // New code to load existing managed identities
-  window.onload = function() {
+}
+// New code to load existing managed identities
+window.onload = function() {
     let managedIdentities = document.getElementById('preloadedIdentityContainer').textContent;
     if (managedIdentities) {
         managedIdentities = JSON.parse(managedIdentities);
@@ -104,7 +104,6 @@ function addRole(identityIndex) {
         }
     }
   }
-}
   </script>
 
 </body>
