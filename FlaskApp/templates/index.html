@@ -35,8 +35,8 @@
 </form>
 
 <script>
-let identityCount = 1;
-let rolesCounts = { 1: 1 };
+let identityCount = 0;
+let rolesCounts = {};
 
 function addIdentity() {
     identityCount++;
@@ -61,7 +61,7 @@ function addIdentity() {
 }
 
 function addRole(identityIndex) {
-    if (!rolesCounts[identityIndex]) rolesCounts[identityIndex] = 1;
+    if (!rolesCounts[identityIndex]) rolesCounts[identityIndex] = 0;
     rolesCounts[identityIndex]++;
 
     const roleContainer = document.getElementById(`rolesContainer_${identityIndex}`);
@@ -82,11 +82,9 @@ window.onload = function() {
     if (managedIdentities) {
         managedIdentities = JSON.parse(managedIdentities);
         
-        // Reset the identity count
-        identityCount = 0;
-        
         for (let i = 0; i < managedIdentities.length; i++) {
-            addIdentity();
+            addIdentity(true);
+            identityCount++;
             const identity = managedIdentities[i];
             document.getElementsByName(`id_${identityCount}`)[0].value = identity.id;
 
@@ -94,7 +92,8 @@ window.onload = function() {
             rolesCounts[identityCount] = 0;
 
             for (let j = 0; j < identity.roles.length; j++) {
-                addRole(identityCount);
+                addRole(identityCount, true);
+                rolesCounts[identityCount]++;
                 const role = identity.roles[j];
                 document.getElementsByName(`scope_${identityCount}_${rolesCounts[identityCount]}`)[0].value = role.scope;
                 document.getElementsByName(`role_definition_${identityCount}_${rolesCounts[identityCount]}`)[0].value = role.role_definition_name;
