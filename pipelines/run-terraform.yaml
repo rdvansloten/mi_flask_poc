@@ -19,12 +19,16 @@ stages:
 
     - script: terraform init
       displayName: 'Terraform init'
+      workingDirectory: terraform
 
     - script: terraform validate
       displayName: 'Terraform validate'
+      workingDirectory: terraform
 
     - script: terraform plan
       displayName: 'Terraform plan'
+      workingDirectory: terraform
 
     - script: terraform apply -auto-approve
       displayName: 'Terraform apply'
+      workingDirectory: terraform
