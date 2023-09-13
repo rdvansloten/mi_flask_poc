@@ -53,14 +53,30 @@
 <body>
   <h1>Managed Identities</h1>
   <form action="/" method="post">
-      <input type="hidden" id="id_count" name="id_count" value="0">
-      <input type="hidden" id="roles_count_{{ loop.index }}" name="roles_count_{{ loop.index }}" value="{{ identity.roles|length }}">
-      <input type="hidden" name="deleted_identities" id="deleted_identities" value="[]">
-      <input type="hidden" name="deleted_roles" id="deleted_roles" value="[]">
+      <input type="hidden" id="id_count" name="id_count" value="{{ managed_identities|length }}">
+      
       <div id="identities">
-          <!-- Identities will be inserted here -->
+          {% for identity in managed_identities %}
+          <div class="identity" id="identity_{{ loop.index }}">
+              <label>Managed Identity: <input type="text" name="id_{{ loop.index }}" value="{{ identity.id }}"></label>
+              <input type="hidden" id="roles_count_{{ loop.index }}" name="roles_count_{{ loop.index }}" value="{{ identity.roles|length }}">
+              <button type="button" onclick="deleteIdentity({{ loop.index }})">Delete Identity</button>
+              
+              <div id="roles_{{ loop.index }}">
+                  {% for role in identity.roles %}
+                  <div class="role" id="role_{{ loop.index }}">
+                      <!-- role fields here -->
+                      <button type="button" onclick="deleteRole({{ loop.index }})">Delete Role</button>
+                  </div>
+                  {% endfor %}
+              </div>
+              
+              <button type="button" onclick="addRole({{ loop.index }})">Add Another Role</button>
+          </div>
+          {% endfor %}
       </div>
-      <button type="button" onclick="addIdentity()">Add Identity</button>
+      
+      <button type="button" onclick="addIdentity()">Add Another Identity</button>
       <input type="submit" value="Submit">
   </form>
   <script>
