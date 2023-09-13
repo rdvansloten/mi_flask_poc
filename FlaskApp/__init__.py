@@ -59,7 +59,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        logging.info(request.form)
+        logging.info("Received form data: %s", request.form)
         data = request.form
 
         managed_identities = []
@@ -88,11 +88,15 @@ def index():
 
                     temp_roles[identity_index][role_index][field] = value
 
+            logging.info("Temporary roles so far: %s", temp_roles)
+
         for identity_index, roles in temp_roles.items():
             for role_index, role_data in roles.items():
                 while len(managed_identities[identity_index]["roles"]) <= role_index:
                     managed_identities[identity_index]["roles"].append({})
                 managed_identities[identity_index]["roles"][role_index] = role_data
+
+        logging.info("Final managed identities: %s", managed_identities)
 
 
         # Upload file to Azure Blob Storage
