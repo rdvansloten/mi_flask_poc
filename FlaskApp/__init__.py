@@ -3,6 +3,7 @@ from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 import json
 import os
 import requests
+import base64
 
 # Get Storage Account details from environment
 STORAGE_ACCOUNT_CONNECTION_STRING = os.environ["STORAGE_ACCOUNT_CONNECTION_STRING"]
@@ -16,7 +17,7 @@ def trigger_pipeline(personal_access_token, organization_name, project_name, pip
     
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Basic {personal_access_token}',
+        'Authorization': f'Basic {base64.b64encode(personal_access_token)}',
     }
 
     data = {
