@@ -59,9 +59,10 @@
         <div class="identity" id="identity_{{ loop.index }}">
             <label>Managed Identity: <input type="text" name="id_{{ loop.index }}" value="{{ identity.id }}"></label>
             <input type="hidden" id="roles_count_{{ loop.index }}" name="roles_count_{{ loop.index }}" value="{{ identity.roles|length }}">
+            <button type="button" onclick="deleteIdentity({{ loop.index }})">Delete Identity</button>
             <div id="roles_{{ loop.index }}">
-              {% for role in identity.roles %}
-              <div class="role" id="role_{{ loop.index }}">
+                {% for role in identity.roles %}
+                <div class="role" id="role_{{ loop.index }}">
                   <label>Scope:</label>
                   <select name="scope_{{ loop.index }}">
                       <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad" {% if role.scope == '/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad' %}selected{% endif %}>Subscription "Personal"</option>
@@ -74,7 +75,8 @@
                   </select>
                   <label>Description:</label>
                   <input type="text" name="description_{{ loop.index }}" value="{{ role.description }}">
-              </div>
+                  <button type="button" onclick="deleteRole({{ loop.index }})">Delete Role</button>
+                </div>
               {% endfor %}
             </div>
             <button type="button" onclick="addRole({{ loop.index }})">Add Another Role</button>
@@ -140,6 +142,19 @@
             `;
             document.getElementById(`roles_${identityId}`).appendChild(roleDiv);
             document.getElementById(`roles_count_${identityId}`).value = roleCounts[identityId];
+        }
+
+        function deleteIdentity(identityId) {
+            const identityDiv = document.getElementById(`identity_${identityId}`);
+            identityDiv.remove();
+            identityCount--;
+            document.getElementById('id_count').value = identityCount;
+        }
+
+        function deleteRole(roleId) {
+            const roleDiv = document.getElementById(`role_${roleId}`);
+            roleDiv.remove();
+            // Update roleCounts and roles_count hidden input
         }
     </script>
 </body>
