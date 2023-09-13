@@ -87,6 +87,7 @@ window.onload = function() {
 
             for (let j = 0; j < identity.roles.length; j++) {
                 addRole(identityCount, true);
+                // Increment roleCount first before setting values
                 rolesCounts[identityCount]++;
                 const role = identity.roles[j];
                 document.getElementsByName(`scope_${identityCount}_${rolesCounts[identityCount]}`)[0].value = role.scope;
@@ -94,11 +95,15 @@ window.onload = function() {
                 document.getElementsByName(`description_${identityCount}_${rolesCounts[identityCount]}`)[0].value = role.description;
             }
 
+            // Update the hidden input field for role count
+            document.querySelector(`input[name="roles_count_${identityCount}"]`).value = rolesCounts[identityCount];
+            
             // Increment the identityCount after fully loading an identity
             identityCount++;
         }
     }
 };
+
 
 </script>
 
