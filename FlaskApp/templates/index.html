@@ -82,7 +82,7 @@
 
         let identityBlockHtml = `
           <div class="identity-block">
-            <label for="id_${identityIndex}">Identity ID:</label>
+            <label for="id_${identityIndex}">Name:</label>
             <input type="text" id="id_${identityIndex}" name="id_${identityIndex}">
             
             <label for="namespace_${identityIndex}">Namespace:</label>
@@ -105,6 +105,8 @@
 
             <button type="button" class="remove-identity">Remove Identity</button>
             
+            <div style="display: block; color: red; font-size: 11px; font-style: italic;">Be aware that changing the name will redeploy the Managed Identity with a new Application/Object ID!</div>
+
             <div class="roles-container">
               <!-- Dynamic Role Blocks will be appended here -->
             </div>
