@@ -9,6 +9,11 @@
       font-family: Arial, sans-serif;
       margin: 20px;
     }
+    hr {
+        height: 2px;
+        background-color: #008ad7;
+        border: none;
+    }
     .identity-block, .role-block {
       border: 2px solid #008ad7;
       margin-bottom: 15px;
@@ -43,10 +48,12 @@
     }
     input[type="submit"] {
       background-color: #008ad7;
-      padding: 10px 20px;
+      margin: 10px 5px 10px 5px;
+      padding: 10px 15px;
       border: none;
       color: white;
       cursor: pointer;
+      font-size: 15px;
       border-radius: 5px;
     }
     input[type="submit"]:hover {
@@ -61,6 +68,7 @@
       <!-- Dynamic Identity Blocks will be appended here -->
     </div>
     <button type="button" id="add-identity">Add Identity</button>
+    <hr>
     <input type="submit" value="Submit">
   </form>
 
