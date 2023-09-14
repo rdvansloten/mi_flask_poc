@@ -94,6 +94,11 @@
         // If an identity argument is passed, populate the ID field
         if (identity) {
           identityBlockHtml = identityBlockHtml.replace(`name="id_${identityIndex}"`, `name="id_${identityIndex}" value="${identity.id}"`);
+          identityBlockHtml = identityBlockHtml.replace(`name="namespace_${identityIndex}"`, `name="namespace_${identityIndex}" value="${identity.namespace || ''}"`);
+          identityBlockHtml = identityBlockHtml.replace(`name="service_account_${identityIndex}"`, `name="service_account_${identityIndex}" value="${identity.service_account || ''}"`);
+          identityBlockHtml = identityBlockHtml.replace(`name="oidc_issuer_url_${identityIndex}"`, `name="oidc_issuer_url_${identityIndex}" data-selected="${identity.oidc_issuer_url || ''}"`);
+          identityBlockHtml = identityBlockHtml.replace(`name="workload_identity_${identityIndex}"`, `name="workload_identity_${identityIndex}" data-selected="${identity.workload_identity ? 'true' : 'false'}"`);
+        }
         }
 
         $('#identities-container').append(identityBlockHtml);
@@ -188,7 +193,7 @@
           // Get the new fields' values
           let namespace = $(this).find("input[name^='namespace']").val();
           let service_account = $(this).find("input[name^='service_account']").val();
-          let oidc_issuer_url = $(this).find("input[name^='oidc_issuer_url']").val();
+          let oidc_issuer_url = $(this).find("select[name^='oidc_issuer_url']").val();
           let workload_identity = $(this).find("select[name^='workload_identity']").val() === "true" ? true : false;
 
           let roles = [];
