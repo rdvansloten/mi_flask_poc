@@ -101,6 +101,15 @@
         }
 
         $('#identities-container').append(identityBlockHtml);
+        const newlyAddedIdentityBlock = roleContainer.children('.role-block').last();
+
+        if (identity) {
+          newlyAddedIdentityBlock.find(`select[name='oidc_issuer_url_${identityIndex}_${roleIndex}'] option`).each(function() {
+            if ($(this).val() === identity.oidc_issuer_url) {
+              $(this).prop('selected', true);
+            }
+          });
+        }
       }
 
       // Function to add a new role block
