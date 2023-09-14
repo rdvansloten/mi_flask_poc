@@ -30,13 +30,9 @@ resource "azurerm_role_assignment" "main" {
   description          = "${each.value.description} - Created by Object ID '${data.azurerm_client_config.current.object_id}'"
 }
 
-output "role_asses" {
-  value = local.flattened_role_assignments
-}
-
 # Federation
 resource "azurerm_federated_identity_credential" "main" {
-  for_each = local.flattened_role_assignments
+  for_each = local.workload_identities
 
   name                = "${each.value.identity_id}-${each.value.namespace}-${each.value.service_account}"
   resource_group_name = azurerm_resource_group.main.name
@@ -49,26 +45,15 @@ resource "azurerm_federated_identity_credential" "main" {
 locals {
   json_data = jsondecode(data.http.get_json.response_body)
 
-  # flattened_role_assignments = [
-  #   for identity in local.json_data : {
-  #     identity_id          = identity.id
-  #     namespace            = identity.namespace
-  #     oidc_issuer_url      = identity.oidc_issuer_url
-  #     workload_identity    = identity.workload_identity
-  #     service_account      = identity.service_account
-  #   }
-  #   if identity.workload_identity == true
-  # ]
-
-  flattened_role_assignments = {
-    for identity in local.json_data : 
-      identity.id => {
-        identity_id          = identity.id
-        namespace            = identity.namespace
-        oidc_issuer_url      = identity.oidc_issuer_url
-        workload_identity    = identity.workload_identity
-        service_account      = identity.service_account
-      }
+  workload_identities = {
+    for identity in local.json_data :
+    identity.id => {
+      identity_id       = identity.id
+      namespace         = identity.namespace
+      oidc_issuer_url   = identity.oidc_issuer_url
+      workload_identity = identity.workload_identity
+      service_account   = identity.service_account
+    }
     if identity.workload_identity == true
   }
 
