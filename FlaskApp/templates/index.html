@@ -99,7 +99,6 @@
           identityBlockHtml = identityBlockHtml.replace(`name="oidc_issuer_url_${identityIndex}"`, `name="oidc_issuer_url_${identityIndex}" data-selected="${identity.oidc_issuer_url || ''}"`);
           identityBlockHtml = identityBlockHtml.replace(`name="workload_identity_${identityIndex}"`, `name="workload_identity_${identityIndex}" data-selected="${identity.workload_identity ? 'true' : 'false'}"`);
         }
-        }
 
         $('#identities-container').append(identityBlockHtml);
       }
