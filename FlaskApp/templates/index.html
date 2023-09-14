@@ -109,6 +109,20 @@
         `;
         
         roleContainer.append(roleBlockHtml);
+        const newlyAddedRoleBlock = roleContainer.children('.role-block').last();
+
+        if (role) {
+          newlyAddedRoleBlock.find(`select[name='scope_${identityIndex}_${roleIndex}'] option`).each(function() {
+            if ($(this).val() === role.scope) {
+              $(this).prop('selected', true);
+            }
+          });
+          newlyAddedRoleBlock.find(`select[name='role_definition_${identityIndex}_${roleIndex}'] option`).each(function() {
+            if ($(this).val() === role.role_definition) {
+              $(this).prop('selected', true);
+            }
+          });
+        }
       }
 
       // Fetch managed identities from the server
