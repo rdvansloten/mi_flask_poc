@@ -31,7 +31,7 @@ resource "azurerm_role_assignment" "main" {
 }
 
 output "role_asses" {
-  value = local.role_assignments
+  value = local.flattened_role_assignments
 }
 
 # Federation
@@ -52,6 +52,12 @@ resource "azurerm_federated_identity_credential" "main" {
 
 locals {
   json_data = jsondecode(data.http.get_json.response_body)
+
+  flattened_role_assignments = {
+    for idx, assignment in flatten(local.role_assignments) :
+    format("%s-%s", assignment.identity_id, idx) => assignment
+    if assignment.workload_identity == true
+  }
 
   role_assignments = [
     for identity in local.json_data : [
