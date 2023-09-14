@@ -56,6 +56,7 @@ json_file_name = 'managed_identities.tfvars.json'
 
 app = Flask(__name__)
 
+@app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         logging.info("Received JSON data: %s", request.json)
