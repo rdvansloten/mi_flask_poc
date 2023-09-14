@@ -115,10 +115,14 @@
           identityBlockHtml = identityBlockHtml.replace(`name="id_${identityIndex}"`, `name="id_${identityIndex}" value="${identity.id}"`);
           identityBlockHtml = identityBlockHtml.replace(`name="namespace_${identityIndex}"`, `name="namespace_${identityIndex}" value="${identity.namespace || ''}"`);
           identityBlockHtml = identityBlockHtml.replace(`name="service_account_${identityIndex}"`, `name="service_account_${identityIndex}" value="${identity.service_account || ''}"`);
-          identityBlockHtml = identityBlockHtml.replace(`name="workload_identity_${identityIndex}"`, `name="workload_identity_${identityIndex}" data-selected="${identity.workload_identity ? 'true' : 'false'}"`);
-            identityBlockHtml = identityBlockHtml.replace(
+          // identityBlockHtml = identityBlockHtml.replace(`name="workload_identity_${identityIndex}"`, `name="workload_identity_${identityIndex}" data-selected="${identity.workload_identity ? 'true' : 'false'}"`);
+          identityBlockHtml = identityBlockHtml.replace(
             `<option value="${identity.oidc_issuer_url}">`,
             `<option value="${identity.oidc_issuer_url}" selected>`
+          );
+          identityBlockHtml = identityBlockHtml.replace(
+            `<option value="${identity.workload_identity}">`,
+            `<option value="${identity.workload_identity}" selected>`
           );
         }
 
