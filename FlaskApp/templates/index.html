@@ -80,6 +80,7 @@
       }
 
       // Function to add a new role block
+      // Function to add a new role block
       function addRoleBlock(roleContainer, role = null, identityIndex, roleIndex) {
         const scopeValue = role ? `value="${role.scope}"` : '';
         const roleDefinitionValue = role ? `value="${role.role_definition}"` : '';
@@ -89,13 +90,14 @@
           <div class="role-block">
             <label for="scope_${identityIndex}_${roleIndex}">Scope:</label>
             <select id="scope_${identityIndex}_${roleIndex}" name="scope_${identityIndex}_${roleIndex}" ${scopeValue}>
-              <option value="scope1">Scope 1</option>
-              <option value="scope2">Scope 2</option>
+              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription "Personal"</option>
+              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group "mi_flask_poc"</option>
             </select>
             <label for="role_definition_${identityIndex}_${roleIndex}">Role Definition:</label>
             <select id="role_definition_${identityIndex}_${roleIndex}" name="role_definition_${identityIndex}_${roleIndex}" ${roleDefinitionValue}>
-              <option value="role1">Role 1</option>
-              <option value="role2">Role 2</option>
+              <option value="Reader">Reader</option>
+              <option value="Contributor">Contributor</option>
+              <option value="Owner">Owner</option>
             </select>
             <label for="description_${identityIndex}_${roleIndex}">Description:</label>
             <input type="text" id="description_${identityIndex}_${roleIndex}" name="description_${identityIndex}_${roleIndex}" ${descriptionValue}>
@@ -105,7 +107,6 @@
         
         roleContainer.append(roleBlockHtml);
       }
-
 
       // Fetch managed identities from the server
       $.getJSON("/get_managed_identities", function(data) {
