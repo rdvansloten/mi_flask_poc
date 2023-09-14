@@ -32,14 +32,18 @@ resource "azurerm_role_assignment" "main" {
 
 # Federation
 resource "azurerm_federated_identity_credential" "main" {
-  for_each = { for idx, assignment in flatten(local.role_assignments) : format("%s-%s", assignment.identity_id, idx) => assignment }
+  for_each = {
+    for idx, assignment in flatten(local.role_assignments) :
+    format("%s-%s", assignment.identity_id, idx) => assignment
+    if assignment.workload_identity == true
+  }
 
-  name                = "workload-identity-credentials"
+  name                = "fed-${each.value.identity_id}"
   resource_group_name = azurerm_resource_group.main.name
   audience            = ["api://AzureADTokenExchange"]
-  issuer              = each.value.
-  parent_id           = azurerm_user_assigned_identity.main.id
-  subject             = "system:serviceaccount:default:workload-identity"
+  issuer              = each.value.oidc_issuer_url
+  parent_id           = azurerm_user_assigned_identity.main[each.value.identity_id].id
+  subject             = "system:serviceaccount:${each.value.namespace}:${each.value.service_account}"
 }
 
 locals {
@@ -50,6 +54,7 @@ locals {
       for role in identity.roles : {
         identity_id          = identity.id
         namespace            = identity.namespace
+        oidc_issuer_url      = identity.oidc_issuer_url
         workload_identity    = identity.workload_identity
         service_account      = identity.service_account
         role_definition_name = role.role_definition
