@@ -38,7 +38,7 @@ resource "azurerm_federated_identity_credential" "main" {
     if assignment.workload_identity == true
   }
 
-  name                = "fed-${each.value.identity_id}"
+  name                = "${each.value.identity_id}-${each.value.namespace}-${each.value.service_account}"
   resource_group_name = azurerm_resource_group.main.name
   audience            = ["api://AzureADTokenExchange"]
   issuer              = each.value.oidc_issuer_url
