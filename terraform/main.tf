@@ -49,16 +49,28 @@ resource "azurerm_federated_identity_credential" "main" {
 locals {
   json_data = jsondecode(data.http.get_json.response_body)
 
-  flattened_role_assignments = [
-    for identity in local.json_data : {
-      identity_id          = identity.id
-      namespace            = identity.namespace
-      oidc_issuer_url      = identity.oidc_issuer_url
-      workload_identity    = identity.workload_identity
-      service_account      = identity.service_account
-    }
+  # flattened_role_assignments = [
+  #   for identity in local.json_data : {
+  #     identity_id          = identity.id
+  #     namespace            = identity.namespace
+  #     oidc_issuer_url      = identity.oidc_issuer_url
+  #     workload_identity    = identity.workload_identity
+  #     service_account      = identity.service_account
+  #   }
+  #   if identity.workload_identity == true
+  # ]
+
+  flattened_role_assignments = {
+    for identity in local.json_data : 
+      identity.id => {
+        identity_id          = identity.id
+        namespace            = identity.namespace
+        oidc_issuer_url      = identity.oidc_issuer_url
+        workload_identity    = identity.workload_identity
+        service_account      = identity.service_account
+      }
     if identity.workload_identity == true
-  ]
+  }
 
   role_assignments = [
     for identity in local.json_data : [
