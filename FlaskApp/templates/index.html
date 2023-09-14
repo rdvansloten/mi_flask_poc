@@ -45,6 +45,7 @@
   </style>
 </head>
 <body>
+  <h1 style="color: #008ad7; text-align: center;">Managed Identities</h1>
   <form id="managed-identities-form">
     <div id="identities-container">
       <!-- Dynamic Identity Blocks will be appended here -->
@@ -79,13 +80,14 @@
           <div class="role-block">
             <label for="scope_${roleIndex}">Scope:</label>
             <select id="scope_${roleIndex}" name="scope_${roleIndex}">
-              <option value="scope1">Scope 1</option>
-              <option value="scope2">Scope 2</option>
+              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription "Personal"</option>
+              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group "mi_flask_poc"</option>
             </select>
-            <label for="role_definition_${roleIndex}">Role Definition:</label>
+            <label for="role_definition_${roleIndex}">Role Name:</label>
             <select id="role_definition_${roleIndex}" name="role_definition_${roleIndex}">
-              <option value="role1">Role 1</option>
-              <option value="role2">Role 2</option>
+              <option value="Reader">Reader</option>
+              <option value="Contributor">Contributor</option>
+              <option value="Owner">Owner</option>
             </select>
             <label for="description_${roleIndex}">Description:</label>
             <input type="text" id="description_${roleIndex}" name="description_${roleIndex}">
