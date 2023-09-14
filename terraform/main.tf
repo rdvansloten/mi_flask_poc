@@ -56,9 +56,6 @@ locals {
       oidc_issuer_url      = identity.oidc_issuer_url
       workload_identity    = identity.workload_identity
       service_account      = identity.service_account
-      role_definition_name = role.role_definition
-      scope                = role.scope
-      description          = role.description
     }
     if identity.workload_identity == true
   ]
