@@ -57,9 +57,9 @@
   <script>
     $(document).ready(function() {
       // Function to add a new identity block
-      function addIdentityBlock() {
+      function addIdentityBlock(identity = null) {
         const identityIndex = $(".identity-block").length + 1;
-        const identityBlockHtml = `
+        let identityBlockHtml = `
           <div class="identity-block">
             <label for="id_${identityIndex}">Identity ID:</label>
             <input type="text" id="id_${identityIndex}" name="id_${identityIndex}">
@@ -70,10 +70,10 @@
             <button type="button" class="add-role">Add Role</button>
           </div>
         `;
-        
-        // Populate the identity ID if it exists
-        if (identity && identity.id) {
-          identityBlockHtml = identityBlockHtml.replace('name="id"', `name="id" value="${identity.id}"`);
+
+        // If an identity argument is passed, populate the ID field
+        if (identity) {
+          identityBlockHtml = identityBlockHtml.replace(`name="id_${identityIndex}"`, `name="id_${identityIndex}" value="${identity.id}"`);
         }
 
         $('#identities-container').append(identityBlockHtml);
@@ -113,15 +113,15 @@
 
       // Fetch managed identities from the server
       $.getJSON("/get_managed_identities", function(data) {
-      data.forEach(function(identity, identityIndex) {
-        addIdentityBlock(identity);
+        data.forEach(function(identity, identityIndex) {
+          addIdentityBlock(identity);
 
-        const roleContainer = $('.identity-block:last .roles-container');
-        identity.roles.forEach(function(role, roleIndex) {
-          addRoleBlock(roleContainer, role, identityIndex + 1);
+          const roleContainer = $('.identity-block:last .roles-container');
+          identity.roles.forEach(function(role, roleIndex) {
+            addRoleBlock(roleContainer, role, identityIndex + 1);
+          });
         });
       });
-    });
 
       // Add a new identity block on click
       $('#add-identity').click(function() {
