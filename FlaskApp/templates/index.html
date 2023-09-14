@@ -70,6 +70,12 @@
             <button type="button" class="add-role">Add Role</button>
           </div>
         `;
+        
+        // Populate the identity ID if it exists
+        if (identity && identity.id) {
+          identityBlockHtml = identityBlockHtml.replace('name="id"', `name="id" value="${identity.id}"`);
+        }
+
         $('#identities-container').append(identityBlockHtml);
       }
 
@@ -94,8 +100,28 @@
             <button type="button" class="remove-role">Remove Role</button>
           </div>
         `;
+        
+        // Populate the role fields if they exist
+        if (role) {
+          roleBlockHtml = roleBlockHtml.replace('name="scope"', `name="scope" value="${role.scope}"`);
+          roleBlockHtml = roleBlockHtml.replace('name="role_definition"', `name="role_definition" value="${role.role_definition}"`);
+          roleBlockHtml = roleBlockHtml.replace('name="description"', `name="description" value="${role.description}"`);
+        }
+
         roleContainer.append(roleBlockHtml);
       }
+
+      // Fetch managed identities from the server
+      $.getJSON("/get_managed_identities", function(data) {
+        data.forEach(function(identity) {
+          addIdentityBlock(identity);
+
+          const roleContainer = $('.identity-block:last .roles-container');
+          identity.roles.forEach(function(role) {
+            addRoleBlock(roleContainer, role);
+          });
+        });
+      });
 
       // Add a new identity block on click
       $('#add-identity').click(function() {

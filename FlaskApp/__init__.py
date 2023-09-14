@@ -89,6 +89,18 @@ def index():
 
     return render_template('index.html', managed_identities=managed_identities)
 
+@app.route('/get_managed_identities', methods=['GET'])
+def get_managed_identities():
+    container_client = blob_service_client.get_container_client(container_name)
+    blob_client = container_client.get_blob_client(json_file_name)
+    try:
+        blob_data = blob_client.download_blob()
+        managed_identities = json.loads(blob_data.readall().decode('utf-8'))
+    except Exception as e:
+        logging.error(f"Error reading blob: {e}")
+        managed_identities = []
+
+    return jsonify(managed_identities)
 
 # @app.route('/', methods=['GET', 'POST'])
 # def index():
