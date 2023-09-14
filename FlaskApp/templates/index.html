@@ -104,7 +104,7 @@
         const newlyAddedIdentityBlock = roleContainer.children('.role-block').last();
 
         if (identity) {
-          newlyAddedIdentityBlock.find(`select[name='oidc_issuer_url_${identityIndex}_${roleIndex}'] option`).each(function() {
+          newlyAddedIdentityBlock.find(`select[name='oidc_issuer_url_${identityIndex}'] option`).each(function() {
             if ($(this).val() === identity.oidc_issuer_url) {
               $(this).prop('selected', true);
             }
