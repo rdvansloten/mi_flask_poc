@@ -11,6 +11,8 @@ data "http" "get_json" {
   }
 }
 
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_user_assigned_identity" "main" {
   for_each = { for item in local.json_data : item.id => item }
 
@@ -25,6 +27,7 @@ resource "azurerm_role_assignment" "main" {
   principal_id         = azurerm_user_assigned_identity.main[each.value.identity_id].principal_id
   role_definition_name = each.value.role_definition_name
   scope                = each.value.scope
+  description          = "${each.value.description} - Created by Object ID '${data.azurerm_client_config.current.object_id}'"
 }
 
 locals {
@@ -36,6 +39,7 @@ locals {
         identity_id          = identity.id
         role_definition_name = role.role_definition
         scope                = role.scope
+        description          = role.description
       }
     ]
   ]

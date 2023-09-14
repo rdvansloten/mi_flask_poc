@@ -90,14 +90,17 @@
           <div class="role-block">
             <label for="scope_${identityIndex}_${roleIndex}">Scope:</label>
             <select id="scope_${identityIndex}_${roleIndex}" name="scope_${identityIndex}_${roleIndex}" ${scopeValue}>
-              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad">Subscription "Personal"</option>
-              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/mi_flask_poc">Resource Group "mi_flask_poc"</option>
+              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities">Resource Group "test-managed-identities"</option>
+              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities/providers/Microsoft.KeyVault/vaults/testmgdidentitykv">Key Vault "testmgdidentitykv"</option>
+              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities/providers/Microsoft.Storage/storageAccounts/testmgdidentities">Storage Account "testmgdidentities"</option>
+              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities/providers/Microsoft.Network/virtualNetworks/testmgdidentities-vnet">Virtual Network "testmgdidentities-vnet"</option>
             </select>
             <label for="role_definition_${identityIndex}_${roleIndex}">Role Definition:</label>
             <select id="role_definition_${identityIndex}_${roleIndex}" name="role_definition_${identityIndex}_${roleIndex}" ${roleDefinitionValue}>
               <option value="Reader">Reader</option>
-              <option value="Contributor">Contributor</option>
-              <option value="Owner">Owner</option>
+              <option value="Storage Account Contributor">Storage Account Contributor</option>
+              <option value="Key Vault Administrator">Key Vault Administrator</option>
+              <option value="Network Contributor">Network Contributor</option>
             </select>
             <label for="description_${identityIndex}_${roleIndex}">Description:</label>
             <input type="text" id="description_${identityIndex}_${roleIndex}" name="description_${identityIndex}_${roleIndex}" ${descriptionValue}>
