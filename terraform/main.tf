@@ -36,11 +36,7 @@ output "role_asses" {
 
 # Federation
 resource "azurerm_federated_identity_credential" "main" {
-  for_each = {
-    for idx, assignment in flatten(local.role_assignments) :
-    format("%s-%s", assignment.identity_id, idx) => assignment
-    if assignment.workload_identity == true
-  }
+  for_each = local.flattened_role_assignments
 
   name                = "${each.value.identity_id}-${each.value.namespace}-${each.value.service_account}"
   resource_group_name = azurerm_resource_group.main.name
@@ -54,7 +50,16 @@ locals {
   json_data = jsondecode(data.http.get_json.response_body)
 
   flattened_role_assignments = [
-    for identity in local.json_data : identity.id
+    for identity in local.json_data : {
+      identity_id          = identity.id
+      namespace            = identity.namespace
+      oidc_issuer_url      = identity.oidc_issuer_url
+      workload_identity    = identity.workload_identity
+      service_account      = identity.service_account
+      role_definition_name = role.role_definition
+      scope                = role.scope
+      description          = role.description
+    }
     if identity.workload_identity == true
   ]
 
