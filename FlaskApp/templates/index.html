@@ -14,6 +14,15 @@
         background-color: #008ad7;
         border: none;
     }
+    .warning {
+      display: block; 
+      color: #ff5858;
+      margin: 2px 0 5px 0; 
+      font-size: 11px; 
+      font-style: italic;
+      border-radius: 3px;
+      padding: 2px;
+    }
     .identity-block, .role-block {
       border: 2px solid #008ad7;
       margin-bottom: 15px;
@@ -105,7 +114,7 @@
 
             <button type="button" class="remove-identity">Remove Identity</button>
             
-            <div style="display: block; color: red; font-size: 11px; font-style: italic;">Be aware that changing the name will redeploy the Managed Identity with a new Application/Object ID!</div>
+            <div class="warning">Be aware that changing the name will redeploy the Managed Identity with a new Application/Object ID!</div>
 
             <div class="roles-container">
               <!-- Dynamic Role Blocks will be appended here -->
