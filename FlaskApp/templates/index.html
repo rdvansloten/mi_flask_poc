@@ -101,7 +101,7 @@
         }
 
         $('#identities-container').append(identityBlockHtml);
-        const newlyAddedIdentityBlock = roleContainer.children('.role-block').last();
+        const newlyAddedIdentityBlock = identityBlockHtml.children('.identity-block').last();
 
         if (identity) {
           newlyAddedIdentityBlock.find(`select[name='oidc_issuer_url_${identityIndex}'] option`).each(function() {
