@@ -70,13 +70,16 @@
             <label for="service_account_${identityIndex}">Service Account:</label>
             <input type="text" id="service_account_${identityIndex}" name="service_account_${identityIndex}">
             
-            <label for="oidc_issuer_url_${identityIndex}">OIDC Issuer URL:</label>
-            <input type="text" id="oidc_issuer_url_${identityIndex}" name="oidc_issuer_url_${identityIndex}">
+            <label for="oidc_issuer_url_${identityIndex}">AKS Cluster:</label>
+            <select id="oidc_issuer_url_${identityIndex}" name="oidc_issuer_url_${identityIndex}">
+              <option value=""></option>
+              <option value="https://westeurope.oic.prod-aks.azure.com/a1218954-d03b-40f0-a1d7-173a4944b29e/0a128b1c-c7d5-4228-b64b-969835f12146/">AKS Cluster "mi_test_aks"</option>
+            </select>
 
             <label for="workload_identity_${identityIndex}">Workload Identity:</label>
             <select id="workload_identity_${identityIndex}" name="workload_identity_${identityIndex}">
-              <option value="true">True</option>
               <option value="false">False</option>
+              <option value="true">True</option>
             </select>
 
             <button type="button" class="remove-identity">Remove Identity</button>
