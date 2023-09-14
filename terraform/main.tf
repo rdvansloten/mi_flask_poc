@@ -30,6 +30,16 @@ resource "azurerm_role_assignment" "main" {
   description          = "${each.value.description} - Created by Object ID '${data.azurerm_client_config.current.object_id}'"
 }
 
+# Federation
+resource "azurerm_federated_identity_credential" "main" {
+  name                = "workload-identity-credentials"
+  resource_group_name = azurerm_resource_group.main.name
+  audience            = ["api://AzureADTokenExchange"]
+  issuer              = azurerm_kubernetes_cluster.aks.oidc_issuer_url
+  parent_id           = azurerm_user_assigned_identity.main.id
+  subject             = "system:serviceaccount:default:workload-identity"
+}
+
 locals {
   json_data = jsondecode(data.http.get_json.response_body)
 
