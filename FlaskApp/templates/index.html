@@ -63,7 +63,27 @@
           <div class="identity-block">
             <label for="id_${identityIndex}">Identity ID:</label>
             <input type="text" id="id_${identityIndex}" name="id_${identityIndex}">
+            
+            <label for="namespace_${identityIndex}">Namespace:</label>
+            <input type="text" id="namespace_${identityIndex}" name="namespace_${identityIndex}">
+            
+            <label for="service_account_${identityIndex}">Service Account:</label>
+            <input type="text" id="service_account_${identityIndex}" name="service_account_${identityIndex}">
+            
+            <label for="oidc_issuer_url_${identityIndex}">AKS Cluster:</label>
+            <select id="oidc_issuer_url_${identityIndex}" name="oidc_issuer_url_${identityIndex}">
+              <option value=""></option>
+              <option value="https://westeurope.oic.prod-aks.azure.com/a1218954-d03b-40f0-a1d7-173a4944b29e/0a128b1c-c7d5-4228-b64b-969835f12146/">AKS Cluster "mi_test_aks"</option>
+            </select>
+
+            <label for="workload_identity_${identityIndex}">Workload Identity:</label>
+            <select id="workload_identity_${identityIndex}" name="workload_identity_${identityIndex}">
+              <option value="false">False</option>
+              <option value="true">True</option>
+            </select>
+
             <button type="button" class="remove-identity">Remove Identity</button>
+            
             <div class="roles-container">
               <!-- Dynamic Role Blocks will be appended here -->
             </div>
@@ -74,12 +94,15 @@
         // If an identity argument is passed, populate the ID field
         if (identity) {
           identityBlockHtml = identityBlockHtml.replace(`name="id_${identityIndex}"`, `name="id_${identityIndex}" value="${identity.id}"`);
+          identityBlockHtml = identityBlockHtml.replace(`name="namespace_${identityIndex}"`, `name="namespace_${identityIndex}" value="${identity.namespace || ''}"`);
+          identityBlockHtml = identityBlockHtml.replace(`name="service_account_${identityIndex}"`, `name="service_account_${identityIndex}" value="${identity.service_account || ''}"`);
+          identityBlockHtml = identityBlockHtml.replace(`name="oidc_issuer_url_${identityIndex}"`, `name="oidc_issuer_url_${identityIndex}" data-selected="${identity.oidc_issuer_url || ''}"`);
+          identityBlockHtml = identityBlockHtml.replace(`name="workload_identity_${identityIndex}"`, `name="workload_identity_${identityIndex}" data-selected="${identity.workload_identity ? 'true' : 'false'}"`);
         }
 
         $('#identities-container').append(identityBlockHtml);
       }
 
-      // Function to add a new role block
       // Function to add a new role block
       function addRoleBlock(roleContainer, role = null, identityIndex, roleIndex) {
         const scopeValue = role ? `value="${role.scope}"` : '';
@@ -165,6 +188,13 @@
         let identities = [];
         $(".identity-block").each(function() {
           let identityId = $(this).find("input[name^='id']").val();
+
+          // Get the new fields' values
+          let namespace = $(this).find("input[name^='namespace']").val();
+          let service_account = $(this).find("input[name^='service_account']").val();
+          let oidc_issuer_url = $(this).find("select[name^='oidc_issuer_url']").val();
+          let workload_identity = $(this).find("select[name^='workload_identity']").val() === "true" ? true : false;
+
           let roles = [];
           $(this).find(".role-block").each(function() {
             let scope = $(this).find("select[name^='scope']").val();
@@ -172,7 +202,15 @@
             let description = $(this).find("input[name^='description']").val();
             roles.push({ scope, role_definition, description });
           });
-          identities.push({ id: identityId, roles });
+          
+          identities.push({ 
+            id: identityId, 
+            namespace,
+            service_account,
+            oidc_issuer_url,
+            workload_identity,
+            roles 
+          });
         });
 
         // Send the data as JSON
