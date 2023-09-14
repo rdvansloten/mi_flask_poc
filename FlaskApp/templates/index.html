@@ -13,6 +13,7 @@
       border: 2px solid #008ad7;
       margin-bottom: 15px;
       padding: 15px;
+      border-radius: 5px;
     }
     .identity-block label {
       font-weight: bold;
@@ -30,11 +31,12 @@
     button {
       background-color: #008ad7;
       color: white;
-      padding: 10px 20px;
+      padding: 5px 10px;
       margin: 5px;
       border: none;
       font-size: 13px;
       cursor: pointer;
+      border-radius: 5px;
     }
     button:hover {
       background-color: #024c6e;
@@ -45,6 +47,7 @@
       border: none;
       color: white;
       cursor: pointer;
+      border-radius: 5px;
     }
     input[type="submit"]:hover {
       background-color: #024c6e;
@@ -66,6 +69,7 @@
       // Function to add a new identity block
       function addIdentityBlock(identity = null) {
         const identityIndex = $(".identity-block").length + 1;
+
         let identityBlockHtml = `
           <div class="identity-block">
             <label for="id_${identityIndex}">Identity ID:</label>
@@ -103,20 +107,14 @@
           identityBlockHtml = identityBlockHtml.replace(`name="id_${identityIndex}"`, `name="id_${identityIndex}" value="${identity.id}"`);
           identityBlockHtml = identityBlockHtml.replace(`name="namespace_${identityIndex}"`, `name="namespace_${identityIndex}" value="${identity.namespace || ''}"`);
           identityBlockHtml = identityBlockHtml.replace(`name="service_account_${identityIndex}"`, `name="service_account_${identityIndex}" value="${identity.service_account || ''}"`);
-          identityBlockHtml = identityBlockHtml.replace(`name="oidc_issuer_url_${identityIndex}"`, `name="oidc_issuer_url_${identityIndex}" data-selected="${identity.oidc_issuer_url || ''}"`);
           identityBlockHtml = identityBlockHtml.replace(`name="workload_identity_${identityIndex}"`, `name="workload_identity_${identityIndex}" data-selected="${identity.workload_identity ? 'true' : 'false'}"`);
+            identityBlockHtml = identityBlockHtml.replace(
+            `<option value="${identity.oidc_issuer_url}">`,
+            `<option value="${identity.oidc_issuer_url}" selected>`
+          );
         }
 
         $('#identities-container').append(identityBlockHtml);
-        const newlyAddedIdentityBlock = identityBlockHtml.children('.identity-block').last();
-
-        if (identity) {
-          newlyAddedIdentityBlock.find(`select[name='oidc_issuer_url_${identityIndex}'] option`).each(function() {
-            if ($(this).val() === identity.oidc_issuer_url) {
-              $(this).prop('selected', true);
-            }
-          });
-        }
       }
 
       // Function to add a new role block
@@ -126,7 +124,7 @@
         const descriptionValue = role ? `value="${role.description}"` : '';
         
         const roleBlockHtml = `
-          <div class="role-block" style="background-color: rgb(240, 248, 255); border:0;">
+          <div class="role-block" style="background-color: rgb(240, 248, 255); border:0; border-radius: 5px;">
             <label for="scope_${identityIndex}_${roleIndex}">Scope:</label>
             <select id="scope_${identityIndex}_${roleIndex}" name="scope_${identityIndex}_${roleIndex}" ${scopeValue}>
               <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities">Resource Group "test-managed-identities"</option>
