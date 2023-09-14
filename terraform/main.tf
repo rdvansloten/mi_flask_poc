@@ -30,6 +30,16 @@ resource "azurerm_role_assignment" "main" {
   description          = "${each.value.description} - Created by Object ID '${data.azurerm_client_config.current.object_id}'"
 }
 
+output "name" {
+  for_each = {
+    for idx, assignment in flatten(local.role_assignments) :
+    format("%s-%s", assignment.identity_id, idx) => assignment
+    if assignment.workload_identity == true
+  }
+
+  value = each.value.workload_identity
+}
+
 # Federation
 resource "azurerm_federated_identity_credential" "main" {
   for_each = {
