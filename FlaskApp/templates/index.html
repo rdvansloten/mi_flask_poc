@@ -119,7 +119,7 @@
         const descriptionValue = role ? `value="${role.description}"` : '';
         
         const roleBlockHtml = `
-          <div class="role-block">
+          <div class="role-block" style="background-color: rgb(240, 248, 255); border:0;">
             <label for="scope_${identityIndex}_${roleIndex}">Scope:</label>
             <select id="scope_${identityIndex}_${roleIndex}" name="scope_${identityIndex}_${roleIndex}" ${scopeValue}>
               <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities">Resource Group "test-managed-identities"</option>
