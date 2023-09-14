@@ -34,7 +34,7 @@ locals {
     for identity in local.json_data : [
       for role in identity.roles : {
         identity_id          = identity.id
-        role_definition_name = role.role_definition_name
+        role_definition_name = role.role_definition
         scope                = role.scope
       }
     ]
