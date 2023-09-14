@@ -80,7 +80,7 @@
       }
 
       // Function to add a new role block
-      function addRoleBlock(roleContainer) {
+      function addRoleBlock(roleContainer, role, identityIndex) {
         const roleIndex = roleContainer.children('.role-block').length + 1;
         const roleBlockHtml = `
           <div class="role-block">
@@ -103,9 +103,9 @@
         
         // Populate the role fields if they exist
         if (role) {
-          roleBlockHtml = roleBlockHtml.replace('name="scope"', `name="scope" value="${role.scope}"`);
-          roleBlockHtml = roleBlockHtml.replace('name="role_definition"', `name="role_definition" value="${role.role_definition}"`);
-          roleBlockHtml = roleBlockHtml.replace('name="description"', `name="description" value="${role.description}"`);
+          roleBlockHtml = roleBlockHtml.replace('name="scope"', `name="scope_${identityIndex}_${roleIndex}" value="${role.scope}"`);
+          roleBlockHtml = roleBlockHtml.replace('name="role_definition"', `name="role_definition_${identityIndex}_${roleIndex}" value="${role.role_definition}"`);
+          roleBlockHtml = roleBlockHtml.replace('name="description"', `name="description_${identityIndex}_${roleIndex}" value="${role.description}"`);
         }
 
         roleContainer.append(roleBlockHtml);
@@ -113,15 +113,15 @@
 
       // Fetch managed identities from the server
       $.getJSON("/get_managed_identities", function(data) {
-        data.forEach(function(identity) {
-          addIdentityBlock(identity);
+      data.forEach(function(identity, identityIndex) {
+        addIdentityBlock(identity);
 
-          const roleContainer = $('.identity-block:last .roles-container');
-          identity.roles.forEach(function(role) {
-            addRoleBlock(roleContainer, role);
-          });
+        const roleContainer = $('.identity-block:last .roles-container');
+        identity.roles.forEach(function(role, roleIndex) {
+          addRoleBlock(roleContainer, role, identityIndex + 1);
         });
       });
+    });
 
       // Add a new identity block on click
       $('#add-identity').click(function() {
