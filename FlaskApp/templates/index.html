@@ -40,6 +40,13 @@
       display: block;
       margin: 0 0 5px 0;
     }
+
+    .description-input {
+      border: 0;
+      border-bottom: 1px solid #008ad7;
+      width: 420px;
+    }
+
     .identity-property-block input[type="text"] {
       width: 120px;
       font-size: 13px;
@@ -47,6 +54,8 @@
       height: 25px;
       line-height: 25px;
       margin-right: 25px;
+      border: 0;
+      border-bottom: 1px solid #008ad7;
     }
 
     input[type="text"] {
@@ -232,7 +241,7 @@
 
             <div class="role-block-option">
               <label for="description_${identityIndex}_${roleIndex}">Description:</label>
-              <input type="text" style="width: 420px;" id="description_${identityIndex}_${roleIndex}" name="description_${identityIndex}_${roleIndex}" ${descriptionValue}>
+              <input type="text" class="description-input" id="description_${identityIndex}_${roleIndex}" name="description_${identityIndex}_${roleIndex}" ${descriptionValue}>
             </div>
 
             <button type="button" class="remove-role">Remove Role</button>
