@@ -19,6 +19,8 @@
     .warning {
       display: inline; 
       color: #fb3939;
+      right: 0;
+      position: absolute;
       margin: 2px 0 10px 0;
       font-size: 11px; 
       font-style: italic;
@@ -113,7 +115,7 @@
 </head>
 <body>
   <h1 style="color: #008ad7; text-align: center;">Managed Identities</h1>
-  <form id="managed-identities-form">
+  <form id="managed-identities-form" style="position: relative";>
     <button type="button" id="add-identity">Add Identity</button> <input type="submit" value="Submit">
     <div class="warning">Be aware that changing an existing Managed Identity name will redeploy it with a new Application and Object ID!</div>
     <div id="identities-container">
