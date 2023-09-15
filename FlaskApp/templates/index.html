@@ -112,7 +112,8 @@
           <div class="identity-block">
             <div class="identity-name-block">
               <!-- <label for="id_${identityIndex}">Name:</label> -->
-              <input type="text" class="identity-name" id="id_${identityIndex}" name="id_${identityIndex}" placeholder="Managed Identity">
+              <input type="text" class="identity-name" id="id_${identityIndex}" name="id_${identityIndex}" placeholder="Managed Identity"> 
+              <button type="button" class="remove-identity">Remove Identity</button>
               <div class="warning">Be aware that changing an existing Managed Identity name will redeploy it with a new Application and Object ID!</div>
             </div>
 
@@ -135,8 +136,6 @@
                 <option value="true">True</option>
               </select>
             </div>
-
-            <button type="button" class="remove-identity">Remove Identity</button>
 
             <div class="roles-container">
               <!-- Dynamic Role Blocks will be appended here -->
