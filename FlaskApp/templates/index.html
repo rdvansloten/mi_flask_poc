@@ -17,7 +17,7 @@
         border: none;
     }
     .warning {
-      display: block; 
+      display: inline; 
       color: #fb3939;
       margin: 2px 0 10px 0; 
       font-size: 11px; 
@@ -34,6 +34,10 @@
     .identity-name {
       font-size: 24px;
       border: 0;
+    }
+    .identity-property-block {
+      display: block;
+      margin: 0 0 5px 0;
     }
     .identity-block, .role-block {
       border: 2px solid #008ad7;
@@ -106,29 +110,30 @@
             <div class="identity-name-block">
               <!-- <label for="id_${identityIndex}">Name:</label> -->
               <input type="text" class="identity-name" id="id_${identityIndex}" name="id_${identityIndex}" placeholder="Managed Identity">
+              <div class="warning">Be aware that changing an existing Managed Identity name will redeploy it with a new Application and Object ID!</div>
             </div>
 
-            <label for="namespace_${identityIndex}">Namespace:</label>
-            <input type="text" id="namespace_${identityIndex}" name="namespace_${identityIndex}">
-            
-            <label for="service_account_${identityIndex}">Service Account:</label>
-            <input type="text" id="service_account_${identityIndex}" name="service_account_${identityIndex}">
-            
-            <label for="oidc_issuer_url_${identityIndex}">AKS Cluster:</label>
-            <select id="oidc_issuer_url_${identityIndex}" name="oidc_issuer_url_${identityIndex}">
-              <option value=""></option>
-              <option value="https://westeurope.oic.prod-aks.azure.com/a1218954-d03b-40f0-a1d7-173a4944b29e/0a128b1c-c7d5-4228-b64b-969835f12146/">AKS Cluster "mi_test_aks"</option>
-            </select>
+            <div class="identity-property-block">
+              <label for="namespace_${identityIndex}">Namespace:</label>
+              <input type="text" id="namespace_${identityIndex}" name="namespace_${identityIndex}">
+              
+              <label for="service_account_${identityIndex}">Service Account:</label>
+              <input type="text" id="service_account_${identityIndex}" name="service_account_${identityIndex}">
+              
+              <label for="oidc_issuer_url_${identityIndex}">AKS Cluster:</label>
+              <select id="oidc_issuer_url_${identityIndex}" name="oidc_issuer_url_${identityIndex}">
+                <option value=""></option>
+                <option value="https://westeurope.oic.prod-aks.azure.com/a1218954-d03b-40f0-a1d7-173a4944b29e/0a128b1c-c7d5-4228-b64b-969835f12146/">AKS Cluster "mi_test_aks"</option>
+              </select>
 
-            <label for="workload_identity_${identityIndex}">Workload Identity:</label>
-            <select id="workload_identity_${identityIndex}" name="workload_identity_${identityIndex}">
-              <option value="false">False</option>
-              <option value="true">True</option>
-            </select>
+              <label for="workload_identity_${identityIndex}">Workload Identity:</label>
+              <select id="workload_identity_${identityIndex}" name="workload_identity_${identityIndex}">
+                <option value="false">False</option>
+                <option value="true">True</option>
+              </select>
+            </div>
 
             <button type="button" class="remove-identity">Remove Identity</button>
-            
-            <div class="warning">Be aware that changing an existing Managed Identity name will redeploy it with a new Application and Object ID!</div>
 
             <div class="roles-container">
               <!-- Dynamic Role Blocks will be appended here -->
