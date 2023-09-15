@@ -150,6 +150,12 @@
             </div>
 
             <div class="identity-property-block">
+              <label for="workload_identity_${identityIndex}">Workload Identity:</label>
+              <select id="workload_identity_${identityIndex}" name="workload_identity_${identityIndex}">
+                <option value="false">False</option>
+                <option value="true">True</option>
+              </select>
+
               <label for="namespace_${identityIndex}">Namespace:</label>
               <input type="text" id="namespace_${identityIndex}" name="namespace_${identityIndex}">
               
@@ -160,12 +166,6 @@
               <select id="oidc_issuer_url_${identityIndex}" name="oidc_issuer_url_${identityIndex}">
                 <option value=""></option>
                 <option value="https://westeurope.oic.prod-aks.azure.com/a1218954-d03b-40f0-a1d7-173a4944b29e/0a128b1c-c7d5-4228-b64b-969835f12146/">AKS Cluster "mi_test_aks"</option>
-              </select>
-
-              <label for="workload_identity_${identityIndex}">Workload Identity:</label>
-              <select id="workload_identity_${identityIndex}" name="workload_identity_${identityIndex}">
-                <option value="false">False</option>
-                <option value="true">True</option>
               </select>
             </div>
 
@@ -333,6 +333,23 @@
         });
       });
     });
+
+    // Get the input element with class "name"
+    var input = document.querySelector('input.identity-name');
+
+    // Check if the input exists
+    if (input) {
+      // Bind the "resizeInput" callback on "input" event
+      input.addEventListener('input', resizeInput);
+
+      // Immediately call the function
+      resizeInput.call(input);
+    }
+
+    // Define the function that resizes the input
+    function resizeInput() {
+      this.style.width = this.value.length + 'ch';
+    }
   </script>
 </body>
 </html>
