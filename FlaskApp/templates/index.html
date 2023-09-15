@@ -19,7 +19,7 @@
     .warning {
       display: inline; 
       color: #fb3939;
-      margin: 2px 0 10px 0; 
+      margin: 2px 0 10px 0;
       font-size: 11px; 
       font-style: italic;
       border-radius: 20px;
@@ -34,6 +34,7 @@
     .identity-name {
       font-size: 24px;
       border: 0;
+      width: 150px;
     }
     .identity-property-block {
       display: block;
@@ -57,6 +58,14 @@
       margin-right: 0px;
       font-weight: 100;
       font-size: 13px;
+    }
+
+    .role-block-option {
+      display: block;
+    }
+
+    .role-block-option label {
+      width: 200px;
     }
 
     .identity-block input, .identity-block select, .role-block input, .role-block select {
@@ -114,8 +123,9 @@
               <!-- <label for="id_${identityIndex}">Name:</label> -->
               <input type="text" class="identity-name" id="id_${identityIndex}" name="id_${identityIndex}" placeholder="Managed Identity"> 
               <button type="button" class="remove-identity">Remove Identity</button>
-              <div class="warning">Be aware that changing an existing Managed Identity name will redeploy it with a new Application and Object ID!</div>
             </div>
+
+            <div class="warning">Be aware that changing an existing Managed Identity name will redeploy it with a new Application and Object ID!</div>
 
             <div class="identity-property-block">
               <label for="namespace_${identityIndex}">Namespace:</label>
@@ -171,22 +181,31 @@
         
         const roleBlockHtml = `
           <div class="role-block" style="background-color: rgb(240, 248, 255); border:0; border-radius: 5px;">
-            <label for="scope_${identityIndex}_${roleIndex}">Scope:</label>
-            <select id="scope_${identityIndex}_${roleIndex}" name="scope_${identityIndex}_${roleIndex}" ${scopeValue}>
-              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities">Resource Group "test-managed-identities"</option>
-              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities/providers/Microsoft.KeyVault/vaults/testmgdidentitykv">Key Vault "testmgdidentitykv"</option>
-              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities/providers/Microsoft.Storage/storageAccounts/testmgdidentities">Storage Account "testmgdidentities"</option>
-              <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities/providers/Microsoft.Network/virtualNetworks/testmgdidentities-vnet">Virtual Network "testmgdidentities-vnet"</option>
-            </select>
-            <label for="role_definition_${identityIndex}_${roleIndex}">Role Definition:</label>
-            <select id="role_definition_${identityIndex}_${roleIndex}" name="role_definition_${identityIndex}_${roleIndex}" ${roleDefinitionValue}>
-              <option value="Reader">Reader</option>
-              <option value="Storage Account Contributor">Storage Account Contributor</option>
-              <option value="Key Vault Administrator">Key Vault Administrator</option>
-              <option value="Network Contributor">Network Contributor</option>
-            </select>
-            <label for="description_${identityIndex}_${roleIndex}">Description:</label>
-            <input type="text" style="width: 300px;" id="description_${identityIndex}_${roleIndex}" name="description_${identityIndex}_${roleIndex}" ${descriptionValue}>
+            <div class="role-block-option">
+              <label for="scope_${identityIndex}_${roleIndex}">Scope:</label>
+              <select id="scope_${identityIndex}_${roleIndex}" name="scope_${identityIndex}_${roleIndex}" ${scopeValue}>
+                <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities">Resource Group "test-managed-identities"</option>
+                <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities/providers/Microsoft.KeyVault/vaults/testmgdidentitykv">Key Vault "testmgdidentitykv"</option>
+                <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities/providers/Microsoft.Storage/storageAccounts/testmgdidentities">Storage Account "testmgdidentities"</option>
+                <option value="/subscriptions/865f86e6-0a9a-4c2f-8742-ce207e509dad/resourceGroups/test-managed-identities/providers/Microsoft.Network/virtualNetworks/testmgdidentities-vnet">Virtual Network "testmgdidentities-vnet"</option>
+              </select>
+            </div>
+
+            <div class="role-block-option">
+              <label for="role_definition_${identityIndex}_${roleIndex}">Role Definition:</label>
+              <select id="role_definition_${identityIndex}_${roleIndex}" name="role_definition_${identityIndex}_${roleIndex}" ${roleDefinitionValue}>
+                <option value="Reader">Reader</option>
+                <option value="Storage Account Contributor">Storage Account Contributor</option>
+                <option value="Key Vault Administrator">Key Vault Administrator</option>
+                <option value="Network Contributor">Network Contributor</option>
+              </select>
+            </div>
+
+            <div class="role-block-option">
+              <label for="description_${identityIndex}_${roleIndex}">Description:</label>
+              <input type="text" style="width: 300px;" id="description_${identityIndex}_${roleIndex}" name="description_${identityIndex}_${roleIndex}" ${descriptionValue}>
+            </div>
+
             <button type="button" class="remove-role">Remove Role</button>
           </div>
         `;
