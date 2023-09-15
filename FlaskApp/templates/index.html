@@ -297,9 +297,14 @@
       });
 
       // Remove an identity block on click
+      // $('#identities-container').on('click', '.remove-identity', function() {
+      //   $(this).parent('.identity-block').remove();
+      // });
+
       $('#identities-container').on('click', '.remove-identity', function() {
-        $(this).parent('.identity-block').remove();
+          $(this).closest('.identity-block').remove();
       });
+
 
       // Remove a role block on click
       $('#identities-container').on('click', '.remove-role', function() {
