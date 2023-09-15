@@ -98,12 +98,12 @@
     }
     input[type="submit"] {
       background-color: #008ad7;
-      margin: 10px 5px 10px 5px;
-      padding: 10px 15px;
+      margin: 5px;
+      padding: 5px 10px;
       border: none;
       color: white;
       cursor: pointer;
-      font-size: 15px;
+      font-size: 13px;
       border-radius: 5px;
     }
     input[type="submit"]:hover {
@@ -114,13 +114,13 @@
 <body>
   <h1 style="color: #008ad7; text-align: center;">Managed Identities</h1>
   <form id="managed-identities-form">
-    <button type="button" id="add-identity">Add Identity</button>
+    <button type="button" id="add-identity">Add Identity</button> <input type="submit" value="Submit">
     <div class="warning">Be aware that changing an existing Managed Identity name will redeploy it with a new Application and Object ID!</div>
     <div id="identities-container">
       <!-- Dynamic Identity Blocks will be appended here -->
     </div>    
     <!-- <hr> -->
-    <input type="submit" value="Submit">
+    <!-- <input type="submit" value="Submit"> -->
   </form>
 
   <script>
