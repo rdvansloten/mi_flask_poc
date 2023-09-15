@@ -36,7 +36,7 @@
       font-size: 24px;
       border: 0;
       border-bottom: 2px solid #008ad7;
-      width: 150px;
+      width: 250px;
     }
     .identity-property-block {
       display: block;
@@ -357,23 +357,6 @@
         });
       });
     });
-
-    // Get the input element with class "name"
-    var input = document.querySelector('input.identity-name');
-
-    // Check if the input exists
-    if (input) {
-      // Bind the "resizeInput" callback on "input" event
-      input.addEventListener('input', resizeInput);
-
-      // Immediately call the function
-      resizeInput.call(input);
-    }
-
-    // Define the function that resizes the input
-    function resizeInput() {
-      this.style.width = this.value.length + 'ch';
-    }
   </script>
 </body>
 </html>
