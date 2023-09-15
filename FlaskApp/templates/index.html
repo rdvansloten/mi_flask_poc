@@ -115,6 +115,7 @@
   <h1 style="color: #008ad7; text-align: center;">Managed Identities</h1>
   <form id="managed-identities-form">
     <button type="button" id="add-identity">Add Identity</button>
+    <div class="warning">Be aware that changing an existing Managed Identity name will redeploy it with a new Application and Object ID!</div>
     <div id="identities-container">
       <!-- Dynamic Identity Blocks will be appended here -->
     </div>    
@@ -135,8 +136,6 @@
               <input type="text" class="identity-name" id="id_${identityIndex}" name="id_${identityIndex}" placeholder="Managed Identity"> 
               <button type="button" class="remove-identity">Remove Identity</button>
             </div>
-
-            <div class="warning">Be aware that changing an existing Managed Identity name will redeploy it with a new Application and Object ID!</div>
 
             <div class="identity-property-block">
               <label for="namespace_${identityIndex}">Namespace:</label>
